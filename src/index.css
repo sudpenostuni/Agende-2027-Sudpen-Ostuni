@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+:root {
+  --app-bg: #f1f3f5;
+  --card-bg: #ffffff;
+  --surface-alt: #e9ecef;
+  --border-color: #dee2e6;
+  --border-strong: #ced4da;
+  --text-main: #1a1e24;
+  --text-muted: #6c757d;
+  --text-subtle: #adb5bd;
+  --accent-main: #9e2a3b;
+  --accent-hover: #882231;
+  --accent-soft: #faebed;
+  --accent-border: #f5c2c7;
+  --accent-text: #9e2a3b;
+  --header-bg: rgba(255, 255, 255, 0.95);
+}
+
+.bg-app {
+  background-color: var(--app-bg);
+}
+.bg-card {
+  background-color: var(--card-bg);
+}
+.bg-surface-alt {
+  background-color: var(--surface-alt);
+}
+.border-app {
+  border-color: var(--border-color);
+}
+.border-app-strong {
+  border-color: var(--border-strong);
+}
+.text-main {
+  color: var(--text-main);
+}
+.text-muted {
+  color: var(--text-muted);
+}
+.text-subtle {
+  color: var(--text-subtle);
+}
+.bg-accent-main {
+  background-color: var(--accent-main);
+}
+.text-accent-main {
+  color: var(--accent-main);
+}
+.bg-accent-soft {
+  background-color: var(--accent-soft);
+}
+.border-accent-border {
+  border-color: var(--accent-border);
+}
+.text-accent-text {
+  color: var(--accent-text);
+}

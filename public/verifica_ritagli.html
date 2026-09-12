@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verifica e Collaudo Ritagli Copertine e Interni Agende</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #f1f5f9; color: #1e293b; margin: 0; padding: 30px; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .header { margin-bottom: 30px; text-align: center; }
+    .header h1 { font-size: 2rem; color: #0f172a; margin-bottom: 8px; }
+    .header p { color: #64748b; font-size: 1rem; max-width: 700px; margin: 0 auto; }
+    .grid { display: flex; flex-direction: column; gap: 24px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>📋 Pannello di Verifica Ritagli Catalogo Agende</h1>
+      <p>Questo pannello consente di verificare a colpo d'occhio la copertina estratta, l'interno associato (giornaliero o settimanale) e la pagina originale del catalogo per ciascuna linea.</p>
+      <div style="margin-top: 15px;">
+        <a href="/" style="background: #0284c7; color: white; text-decoration: none; font-weight: 600; padding: 10px 20px; border-radius: 8px; display: inline-block;">← Torna al Configuratore Agende</a>
+      </div>
+    </div>
+    <div class="grid">
+      
+    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
+        <div>
+          <h2 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin: 0 0 4px 0;">Linea Nubia</h2>
+          <span style="font-size: 0.85rem; color: #64748b;">Ritaglio da: <b>Pagina 1 (in alto a sinistra)</b> (Pagina 1)</span>
+        </div>
+        <span style="background: #dbeafe; color: #1e40af; font-size: 0.75rem; font-weight: 600; padding: 4px 8px; border-radius: 6px;">
+          5 Formati
+        </span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; align-items: start;">
+        <!-- COPERTINA -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Copertina Unificata</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/covers/nubia.jpg" alt="Linea Nubia" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/covers/nubia.jpg</div>
+        </div>
+
+        <!-- INTERNO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Interno (Esempio)</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/interiors/70126.jpg" alt="Interno Linea Nubia" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/interiors/70126.jpg</div>
+        </div>
+
+        <!-- PAGINA INTERA CATALOGO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Pagina 1 Catalogo Originale</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <a href="/pdfpages/page_01.jpg" target="_blank" title="Clicca per ingrandire la pagina intera">
+              <img src="/pdfpages/page_01.jpg" alt="Pagina 1" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+            </a>
+          </div>
+          <div style="font-size: 0.75rem; color: #2563eb; margin-top: 4px;">🔍 Clicca per ingrandire pagina</div>
+        </div>
+      </div>
+
+      <div style="background: #f8fafc; border-radius: 6px; padding: 10px 14px; margin-top: 4px;">
+        <span style="font-size: 0.78rem; font-weight: 600; color: #334155; display: block; margin-bottom: 4px;">Codici e formati associati a questa linea:</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+          <span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">70126 (17x24 Sett.)</span><span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">70226 (15x21 Giorn.)</span><span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">70426 (17x24 Giorn.)</span><span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">70526 (19x27 Giorn.)</span><span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">70626 (19x27 Sett.)</span>
+        </div>
+      </div>
+    </div>
+  
+
+    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
+        <div>
+          <h2 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin: 0 0 4px 0;">Linea Zaira con elastico</h2>
+          <span style="font-size: 0.85rem; color: #64748b;">Ritaglio da: <b>Pagina 4 (in alto a sinistra)</b> (Pagina 4)</span>
+        </div>
+        <span style="background: #dbeafe; color: #1e40af; font-size: 0.75rem; font-weight: 600; padding: 4px 8px; border-radius: 6px;">
+          4 Formati
+        </span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; align-items: start;">
+        <!-- COPERTINA -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Copertina Unificata</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/covers/zaira.jpg" alt="Linea Zaira con elastico" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/covers/zaira.jpg</div>
+        </div>
+
+        <!-- INTERNO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Interno (Esempio)</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/interiors/73226.jpg" alt="Interno Linea Zaira con elastico" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/interiors/73226.jpg</div>
+        </div>
+
+        <!-- PAGINA INTERA CATALOGO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Pagina 4 Catalogo Originale</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <a href="/pdfpages/page_04.jpg" target="_blank" title="Clicca per ingrandire la pagina intera">
+              <img src="/pdfpages/page_04.jpg" alt="Pagina 4" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+            </a>
+          </div>
+          <div style="font-size: 0.75rem; color: #2563eb; margin-top: 4px;">🔍 Clicca per ingrandire pagina</div>
+        </div>
+      </div>
+
+      <div style="background: #f8fafc; border-radius: 6px; padding: 10px 14px; margin-top: 4px;">
+        <span style="font-size: 0.78rem; font-weight: 600; color: #334155; display: block; margin-bottom: 4px;">Codici e formati associati a questa linea:</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+          <span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">73226 (9x14 Sett.)</span><span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">73526 (15x21 Giorn.)</span><span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">73326 (17x24 Giorn.)</span><span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">73426 (19x27 Sett.)</span>
+        </div>
+      </div>
+    </div>
+  
+
+    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
+        <div>
+          <h2 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin: 0 0 4px 0;">Linea Madrid con elastico</h2>
+          <span style="font-size: 0.85rem; color: #64748b;">Ritaglio da: <b>Pagina 14 (in alto a destra)</b> (Pagina 14)</span>
+        </div>
+        <span style="background: #dbeafe; color: #1e40af; font-size: 0.75rem; font-weight: 600; padding: 4px 8px; border-radius: 6px;">
+          7 Formati
+        </span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; align-items: start;">
+        <!-- COPERTINA -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Copertina Unificata</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/covers/madrid.jpg" alt="Linea Madrid con elastico" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/covers/madrid.jpg</div>
+        </div>
+
+        <!-- INTERNO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Interno (Esempio)</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/interiors/144.jpg" alt="Interno Linea Madrid con elastico" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/interiors/144.jpg</div>
+        </div>
+
+        <!-- PAGINA INTERA CATALOGO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Pagina 14 Catalogo Originale</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <a href="/pdfpages/page_14.jpg" target="_blank" title="Clicca per ingrandire la pagina intera">
+              <img src="/pdfpages/page_14.jpg" alt="Pagina 14" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+            </a>
+          </div>
+          <div style="font-size: 0.75rem; color: #2563eb; margin-top: 4px;">🔍 Clicca per ingrandire pagina</div>
+        </div>
+      </div>
+
+      <div style="background: #f8fafc; border-radius: 6px; padding: 10px 14px; margin-top: 4px;">
+        <span style="font-size: 0.78rem; font-weight: 600; color: #334155; display: block; margin-bottom: 4px;">Codici e formati associati a questa linea:</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+          <span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">144 (9x14 Sett.)</span><span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">134 (15x21 Giorn.)</span><span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">143 (17x24 Giorn.)</span><span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">153 (17x24 Giorn.)</span><span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">131 (19x27 Giorn.)</span><span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">139 (19x27 Giorn.)</span><span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">142 (19x27 Sett.)</span>
+        </div>
+      </div>
+    </div>
+  
+
+    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
+        <div>
+          <h2 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin: 0 0 4px 0;">Linea Rubis con elastico</h2>
+          <span style="font-size: 0.85rem; color: #64748b;">Ritaglio da: <b>Pagina 9 (in alto a sinistra)</b> (Pagina 9)</span>
+        </div>
+        <span style="background: #dbeafe; color: #1e40af; font-size: 0.75rem; font-weight: 600; padding: 4px 8px; border-radius: 6px;">
+          4 Formati
+        </span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; align-items: start;">
+        <!-- COPERTINA -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Copertina Unificata</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/covers/rubis.jpg" alt="Linea Rubis con elastico" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/covers/rubis.jpg</div>
+        </div>
+
+        <!-- INTERNO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Interno (Esempio)</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/interiors/72126.jpg" alt="Interno Linea Rubis con elastico" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/interiors/72126.jpg</div>
+        </div>
+
+        <!-- PAGINA INTERA CATALOGO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Pagina 9 Catalogo Originale</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <a href="/pdfpages/page_09.jpg" target="_blank" title="Clicca per ingrandire la pagina intera">
+              <img src="/pdfpages/page_09.jpg" alt="Pagina 9" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+            </a>
+          </div>
+          <div style="font-size: 0.75rem; color: #2563eb; margin-top: 4px;">🔍 Clicca per ingrandire pagina</div>
+        </div>
+      </div>
+
+      <div style="background: #f8fafc; border-radius: 6px; padding: 10px 14px; margin-top: 4px;">
+        <span style="font-size: 0.78rem; font-weight: 600; color: #334155; display: block; margin-bottom: 4px;">Codici e formati associati a questa linea:</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+          <span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">72126 (9x14 Sett.)</span><span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">70826 (17x24 Sett.)</span><span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">71126 (15x21 Giorn.)</span><span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">71026 (17x24 Giorn.)</span>
+        </div>
+      </div>
+    </div>
+  
+
+    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
+        <div>
+          <h2 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin: 0 0 4px 0;">Linea Spiralata</h2>
+          <span style="font-size: 0.85rem; color: #64748b;">Ritaglio da: <b>Pagina 7 (in basso a destra)</b> (Pagina 7)</span>
+        </div>
+        <span style="background: #dbeafe; color: #1e40af; font-size: 0.75rem; font-weight: 600; padding: 4px 8px; border-radius: 6px;">
+          2 Formati
+        </span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; align-items: start;">
+        <!-- COPERTINA -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Copertina Unificata</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/covers/spiralata.jpg" alt="Linea Spiralata" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/covers/spiralata.jpg</div>
+        </div>
+
+        <!-- INTERNO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Interno (Esempio)</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/interiors/110.jpg" alt="Interno Linea Spiralata" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/interiors/110.jpg</div>
+        </div>
+
+        <!-- PAGINA INTERA CATALOGO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Pagina 7 Catalogo Originale</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <a href="/pdfpages/page_07.jpg" target="_blank" title="Clicca per ingrandire la pagina intera">
+              <img src="/pdfpages/page_07.jpg" alt="Pagina 7" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+            </a>
+          </div>
+          <div style="font-size: 0.75rem; color: #2563eb; margin-top: 4px;">🔍 Clicca per ingrandire pagina</div>
+        </div>
+      </div>
+
+      <div style="background: #f8fafc; border-radius: 6px; padding: 10px 14px; margin-top: 4px;">
+        <span style="font-size: 0.78rem; font-weight: 600; color: #334155; display: block; margin-bottom: 4px;">Codici e formati associati a questa linea:</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+          <span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">110 (17x24 Giorn.)</span><span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">111 (17x24 Sett.)</span>
+        </div>
+      </div>
+    </div>
+  
+
+    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
+        <div>
+          <h2 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin: 0 0 4px 0;">Linea Emeri</h2>
+          <span style="font-size: 0.85rem; color: #64748b;">Ritaglio da: <b>Pagina 6 (in alto a sinistra)</b> (Pagina 6)</span>
+        </div>
+        <span style="background: #dbeafe; color: #1e40af; font-size: 0.75rem; font-weight: 600; padding: 4px 8px; border-radius: 6px;">
+          1 Formati
+        </span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; align-items: start;">
+        <!-- COPERTINA -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Copertina Unificata</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/covers/emeri.jpg" alt="Linea Emeri" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/covers/emeri.jpg</div>
+        </div>
+
+        <!-- INTERNO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Interno (Esempio)</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/interiors/74726.jpg" alt="Interno Linea Emeri" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/interiors/74726.jpg</div>
+        </div>
+
+        <!-- PAGINA INTERA CATALOGO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Pagina 6 Catalogo Originale</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <a href="/pdfpages/page_06.jpg" target="_blank" title="Clicca per ingrandire la pagina intera">
+              <img src="/pdfpages/page_06.jpg" alt="Pagina 6" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+            </a>
+          </div>
+          <div style="font-size: 0.75rem; color: #2563eb; margin-top: 4px;">🔍 Clicca per ingrandire pagina</div>
+        </div>
+      </div>
+
+      <div style="background: #f8fafc; border-radius: 6px; padding: 10px 14px; margin-top: 4px;">
+        <span style="font-size: 0.78rem; font-weight: 600; color: #334155; display: block; margin-bottom: 4px;">Codici e formati associati a questa linea:</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+          <span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">74726 (17x24 Giorn.)</span>
+        </div>
+      </div>
+    </div>
+  
+
+    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
+        <div>
+          <h2 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin: 0 0 4px 0;">Linea Opyra con elastico</h2>
+          <span style="font-size: 0.85rem; color: #64748b;">Ritaglio da: <b>Pagina 6 (in basso a sinistra)</b> (Pagina 6)</span>
+        </div>
+        <span style="background: #dbeafe; color: #1e40af; font-size: 0.75rem; font-weight: 600; padding: 4px 8px; border-radius: 6px;">
+          1 Formati
+        </span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; align-items: start;">
+        <!-- COPERTINA -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Copertina Unificata</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/covers/opyra.jpg" alt="Linea Opyra con elastico" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/covers/opyra.jpg</div>
+        </div>
+
+        <!-- INTERNO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Interno (Esempio)</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/interiors/71226.jpg" alt="Interno Linea Opyra con elastico" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/interiors/71226.jpg</div>
+        </div>
+
+        <!-- PAGINA INTERA CATALOGO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Pagina 6 Catalogo Originale</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <a href="/pdfpages/page_06.jpg" target="_blank" title="Clicca per ingrandire la pagina intera">
+              <img src="/pdfpages/page_06.jpg" alt="Pagina 6" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+            </a>
+          </div>
+          <div style="font-size: 0.75rem; color: #2563eb; margin-top: 4px;">🔍 Clicca per ingrandire pagina</div>
+        </div>
+      </div>
+
+      <div style="background: #f8fafc; border-radius: 6px; padding: 10px 14px; margin-top: 4px;">
+        <span style="font-size: 0.78rem; font-weight: 600; color: #334155; display: block; margin-bottom: 4px;">Codici e formati associati a questa linea:</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+          <span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">71226 (17x24 Giorn.)</span>
+        </div>
+      </div>
+    </div>
+  
+
+    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
+        <div>
+          <h2 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin: 0 0 4px 0;">Linea Felicia</h2>
+          <span style="font-size: 0.85rem; color: #64748b;">Ritaglio da: <b>Pagina 7 (in alto a sinistra)</b> (Pagina 7)</span>
+        </div>
+        <span style="background: #dbeafe; color: #1e40af; font-size: 0.75rem; font-weight: 600; padding: 4px 8px; border-radius: 6px;">
+          1 Formati
+        </span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; align-items: start;">
+        <!-- COPERTINA -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Copertina Unificata</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/covers/felicia.jpg" alt="Linea Felicia" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/covers/felicia.jpg</div>
+        </div>
+
+        <!-- INTERNO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Interno (Esempio)</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/interiors/71926.jpg" alt="Interno Linea Felicia" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/interiors/71926.jpg</div>
+        </div>
+
+        <!-- PAGINA INTERA CATALOGO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Pagina 7 Catalogo Originale</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <a href="/pdfpages/page_07.jpg" target="_blank" title="Clicca per ingrandire la pagina intera">
+              <img src="/pdfpages/page_07.jpg" alt="Pagina 7" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+            </a>
+          </div>
+          <div style="font-size: 0.75rem; color: #2563eb; margin-top: 4px;">🔍 Clicca per ingrandire pagina</div>
+        </div>
+      </div>
+
+      <div style="background: #f8fafc; border-radius: 6px; padding: 10px 14px; margin-top: 4px;">
+        <span style="font-size: 0.78rem; font-weight: 600; color: #334155; display: block; margin-bottom: 4px;">Codici e formati associati a questa linea:</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+          <span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">71926 (17x24 Giorn.)</span>
+        </div>
+      </div>
+    </div>
+  
+
+    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
+        <div>
+          <h2 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin: 0 0 4px 0;">Linea Michi con elastico</h2>
+          <span style="font-size: 0.85rem; color: #64748b;">Ritaglio da: <b>Pagina 10 (in basso a sinistra)</b> (Pagina 10)</span>
+        </div>
+        <span style="background: #dbeafe; color: #1e40af; font-size: 0.75rem; font-weight: 600; padding: 4px 8px; border-radius: 6px;">
+          1 Formati
+        </span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; align-items: start;">
+        <!-- COPERTINA -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Copertina Unificata</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/covers/michi.jpg" alt="Linea Michi con elastico" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/covers/michi.jpg</div>
+        </div>
+
+        <!-- INTERNO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Interno (Esempio)</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/interiors/75226.jpg" alt="Interno Linea Michi con elastico" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/interiors/75226.jpg</div>
+        </div>
+
+        <!-- PAGINA INTERA CATALOGO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Pagina 10 Catalogo Originale</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <a href="/pdfpages/page_10.jpg" target="_blank" title="Clicca per ingrandire la pagina intera">
+              <img src="/pdfpages/page_10.jpg" alt="Pagina 10" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+            </a>
+          </div>
+          <div style="font-size: 0.75rem; color: #2563eb; margin-top: 4px;">🔍 Clicca per ingrandire pagina</div>
+        </div>
+      </div>
+
+      <div style="background: #f8fafc; border-radius: 6px; padding: 10px 14px; margin-top: 4px;">
+        <span style="font-size: 0.78rem; font-weight: 600; color: #334155; display: block; margin-bottom: 4px;">Codici e formati associati a questa linea:</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+          <span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">75226 (19x27 Giorn.)</span>
+        </div>
+      </div>
+    </div>
+  
+
+    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
+        <div>
+          <h2 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin: 0 0 4px 0;">Linea Amely</h2>
+          <span style="font-size: 0.85rem; color: #64748b;">Ritaglio da: <b>Pagina 11 (in alto a sinistra)</b> (Pagina 11)</span>
+        </div>
+        <span style="background: #dbeafe; color: #1e40af; font-size: 0.75rem; font-weight: 600; padding: 4px 8px; border-radius: 6px;">
+          2 Formati
+        </span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; align-items: start;">
+        <!-- COPERTINA -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Copertina Unificata</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/covers/amely.jpg" alt="Linea Amely" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/covers/amely.jpg</div>
+        </div>
+
+        <!-- INTERNO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Interno (Esempio)</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/interiors/70726.jpg" alt="Interno Linea Amely" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/interiors/70726.jpg</div>
+        </div>
+
+        <!-- PAGINA INTERA CATALOGO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Pagina 11 Catalogo Originale</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <a href="/pdfpages/page_11.jpg" target="_blank" title="Clicca per ingrandire la pagina intera">
+              <img src="/pdfpages/page_11.jpg" alt="Pagina 11" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+            </a>
+          </div>
+          <div style="font-size: 0.75rem; color: #2563eb; margin-top: 4px;">🔍 Clicca per ingrandire pagina</div>
+        </div>
+      </div>
+
+      <div style="background: #f8fafc; border-radius: 6px; padding: 10px 14px; margin-top: 4px;">
+        <span style="font-size: 0.78rem; font-weight: 600; color: #334155; display: block; margin-bottom: 4px;">Codici e formati associati a questa linea:</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+          <span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">70726 (17x24 Giorn.)</span><span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">70326 (19x27 Sett.)</span>
+        </div>
+      </div>
+    </div>
+  
+
+    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
+        <div>
+          <h2 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin: 0 0 4px 0;">Linea Quadretti</h2>
+          <span style="font-size: 0.85rem; color: #64748b;">Ritaglio da: <b>Pagina 15 (in alto a sinistra)</b> (Pagina 15)</span>
+        </div>
+        <span style="background: #dbeafe; color: #1e40af; font-size: 0.75rem; font-weight: 600; padding: 4px 8px; border-radius: 6px;">
+          3 Formati
+        </span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; align-items: start;">
+        <!-- COPERTINA -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Copertina Unificata</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/covers/quadretti.jpg" alt="Linea Quadretti" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/covers/quadretti.jpg</div>
+        </div>
+
+        <!-- INTERNO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Interno (Esempio)</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/interiors/140.jpg" alt="Interno Linea Quadretti" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/interiors/140.jpg</div>
+        </div>
+
+        <!-- PAGINA INTERA CATALOGO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Pagina 15 Catalogo Originale</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <a href="/pdfpages/page_15.jpg" target="_blank" title="Clicca per ingrandire la pagina intera">
+              <img src="/pdfpages/page_15.jpg" alt="Pagina 15" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+            </a>
+          </div>
+          <div style="font-size: 0.75rem; color: #2563eb; margin-top: 4px;">🔍 Clicca per ingrandire pagina</div>
+        </div>
+      </div>
+
+      <div style="background: #f8fafc; border-radius: 6px; padding: 10px 14px; margin-top: 4px;">
+        <span style="font-size: 0.78rem; font-weight: 600; color: #334155; display: block; margin-bottom: 4px;">Codici e formati associati a questa linea:</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+          <span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">140 (19x27 Giorn.)</span><span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">137 (15x21 Giorn.)</span><span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">132 (17x24 Giorn.)</span>
+        </div>
+      </div>
+    </div>
+  
+
+    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
+        <div>
+          <h2 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin: 0 0 4px 0;">Linea Targhetta 112</h2>
+          <span style="font-size: 0.85rem; color: #64748b;">Ritaglio da: <b>Pagina 16 (in alto a sinistra)</b> (Pagina 16)</span>
+        </div>
+        <span style="background: #dbeafe; color: #1e40af; font-size: 0.75rem; font-weight: 600; padding: 4px 8px; border-radius: 6px;">
+          3 Formati
+        </span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; align-items: start;">
+        <!-- COPERTINA -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Copertina Unificata</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/covers/112.jpg" alt="Linea Targhetta 112" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/covers/112.jpg</div>
+        </div>
+
+        <!-- INTERNO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Interno (Esempio)</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/interiors/112.jpg" alt="Interno Linea Targhetta 112" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/interiors/112.jpg</div>
+        </div>
+
+        <!-- PAGINA INTERA CATALOGO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Pagina 16 Catalogo Originale</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <a href="/pdfpages/page_16.jpg" target="_blank" title="Clicca per ingrandire la pagina intera">
+              <img src="/pdfpages/page_16.jpg" alt="Pagina 16" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+            </a>
+          </div>
+          <div style="font-size: 0.75rem; color: #2563eb; margin-top: 4px;">🔍 Clicca per ingrandire pagina</div>
+        </div>
+      </div>
+
+      <div style="background: #f8fafc; border-radius: 6px; padding: 10px 14px; margin-top: 4px;">
+        <span style="font-size: 0.78rem; font-weight: 600; color: #334155; display: block; margin-bottom: 4px;">Codici e formati associati a questa linea:</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+          <span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">112 (17x24 Giorn.)</span><span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">158 (Libro prenotazione)</span><span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">159 (Giorn. 17x24)</span>
+        </div>
+      </div>
+    </div>
+  
+
+    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
+        <div>
+          <h2 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin: 0 0 4px 0;">Planning da tavolo 148</h2>
+          <span style="font-size: 0.85rem; color: #64748b;">Ritaglio da: <b>Pagina 8 (in alto al centro)</b> (Pagina 8)</span>
+        </div>
+        <span style="background: #dbeafe; color: #1e40af; font-size: 0.75rem; font-weight: 600; padding: 4px 8px; border-radius: 6px;">
+          1 Formati
+        </span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; align-items: start;">
+        <!-- COPERTINA -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Copertina Unificata</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/covers/148.jpg" alt="Planning da tavolo 148" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/covers/148.jpg</div>
+        </div>
+
+        <!-- INTERNO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Interno (Esempio)</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/interiors/148.jpg" alt="Interno Planning da tavolo 148" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/interiors/148.jpg</div>
+        </div>
+
+        <!-- PAGINA INTERA CATALOGO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Pagina 8 Catalogo Originale</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <a href="/pdfpages/page_08.jpg" target="_blank" title="Clicca per ingrandire la pagina intera">
+              <img src="/pdfpages/page_08.jpg" alt="Pagina 8" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+            </a>
+          </div>
+          <div style="font-size: 0.75rem; color: #2563eb; margin-top: 4px;">🔍 Clicca per ingrandire pagina</div>
+        </div>
+      </div>
+
+      <div style="background: #f8fafc; border-radius: 6px; padding: 10px 14px; margin-top: 4px;">
+        <span style="font-size: 0.78rem; font-weight: 600; color: #334155; display: block; margin-bottom: 4px;">Codici e formati associati a questa linea:</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+          <span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">148 (Formato 10x30 da tavolo)</span>
+        </div>
+      </div>
+    </div>
+  
+
+    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
+        <div>
+          <h2 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin: 0 0 4px 0;">Linea Astuccio / Portafoglio 124</h2>
+          <span style="font-size: 0.85rem; color: #64748b;">Ritaglio da: <b>Pagina 18 (in alto a destra)</b> (Pagina 18)</span>
+        </div>
+        <span style="background: #dbeafe; color: #1e40af; font-size: 0.75rem; font-weight: 600; padding: 4px 8px; border-radius: 6px;">
+          4 Formati
+        </span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; align-items: start;">
+        <!-- COPERTINA -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Copertina Unificata</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/covers/124.jpg" alt="Linea Astuccio / Portafoglio 124" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/covers/124.jpg</div>
+        </div>
+
+        <!-- INTERNO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Interno (Esempio)</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/interiors/124.jpg" alt="Interno Linea Astuccio / Portafoglio 124" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/interiors/124.jpg</div>
+        </div>
+
+        <!-- PAGINA INTERA CATALOGO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Pagina 18 Catalogo Originale</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <a href="/pdfpages/page_18.jpg" target="_blank" title="Clicca per ingrandire la pagina intera">
+              <img src="/pdfpages/page_18.jpg" alt="Pagina 18" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+            </a>
+          </div>
+          <div style="font-size: 0.75rem; color: #2563eb; margin-top: 4px;">🔍 Clicca per ingrandire pagina</div>
+        </div>
+      </div>
+
+      <div style="background: #f8fafc; border-radius: 6px; padding: 10px 14px; margin-top: 4px;">
+        <span style="font-size: 0.78rem; font-weight: 600; color: #334155; display: block; margin-bottom: 4px;">Codici e formati associati a questa linea:</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+          <span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">124 (Astuccio)</span><span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">126 (Portafoglio)</span><span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">121 (Clip)</span><span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">128 (Business)</span>
+        </div>
+      </div>
+    </div>
+  
+
+    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
+        <div>
+          <h2 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin: 0 0 4px 0;">Linea Borsello 125</h2>
+          <span style="font-size: 0.85rem; color: #64748b;">Ritaglio da: <b>Pagina 20 (in alto a destra)</b> (Pagina 20)</span>
+        </div>
+        <span style="background: #dbeafe; color: #1e40af; font-size: 0.75rem; font-weight: 600; padding: 4px 8px; border-radius: 6px;">
+          2 Formati
+        </span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; align-items: start;">
+        <!-- COPERTINA -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Copertina Unificata</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/covers/125.jpg" alt="Linea Borsello 125" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/covers/125.jpg</div>
+        </div>
+
+        <!-- INTERNO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Interno (Esempio)</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <img src="/agende/interiors/125.jpg" alt="Interno Linea Borsello 125" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+          </div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">File: /agende/interiors/125.jpg</div>
+        </div>
+
+        <!-- PAGINA INTERA CATALOGO -->
+        <div style="text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 6px;">Pagina 20 Catalogo Originale</div>
+          <div style="height: 240px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px;">
+            <a href="/pdfpages/page_20.jpg" target="_blank" title="Clicca per ingrandire la pagina intera">
+              <img src="/pdfpages/page_20.jpg" alt="Pagina 20" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 4px;" />
+            </a>
+          </div>
+          <div style="font-size: 0.75rem; color: #2563eb; margin-top: 4px;">🔍 Clicca per ingrandire pagina</div>
+        </div>
+      </div>
+
+      <div style="background: #f8fafc; border-radius: 6px; padding: 10px 14px; margin-top: 4px;">
+        <span style="font-size: 0.78rem; font-weight: 600; color: #334155; display: block; margin-bottom: 4px;">Codici e formati associati a questa linea:</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+          <span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">125 (Borsello)</span><span style="background: white; border: 1px solid #cbd5e1; font-size: 0.75rem; color: #1e293b; padding: 2px 8px; border-radius: 4px;">1296 (Maxi Borsello)</span>
+        </div>
+      </div>
+    </div>
+  
+    </div>
+  </div>
+</body>
+</html>

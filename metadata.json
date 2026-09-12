@@ -1,0 +1,6 @@
+{
+  "name": "Agende Sudpen 2027 Ostuni",
+  "description": "Catalogo e vetrina Agende 2027 Sudpen a Ostuni (BR). 44 modelli disponibili in negozio per visione, prenotazione WhatsApp e personalizzazione con logo o dedica.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
