@@ -10,6 +10,9 @@ import { PrintTechniqueModal } from './components/PrintTechniqueModal';
 import { PriceManagementModal } from './components/PriceManagementModal';
 import { PdfCroppingTool } from './components/PdfCroppingTool';
 import { Footer } from './components/Footer';
+import { User as FirebaseUser } from 'firebase/auth';
+import { initAuth, googleSignIn, googleLogout } from './utils/driveService';
+import { AuthModal } from './components/AuthModal';
 
 export default function App() {
   const [activePage, setActivePage] = useState<'catalog' | 'compare' | 'customize' | 'checkout'>('catalog');
@@ -19,6 +22,12 @@ export default function App() {
   const [pdfCropperOpen, setPdfCropperOpen] = useState(false);
   const [catalogModels, setCatalogModels] = useState<AgendaModel[]>(() => loadStoredCatalog());
   const [availableCoverFiles, setAvailableCoverFiles] = useState<string[]>([]);
+
+  // Google Authentication State
+  const [googleUser, setGoogleUser] = useState<FirebaseUser | null>(null);
+  const [googleToken, setGoogleToken] = useState<string | null>(null);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
 
   // Page 2 State: selections added for comparison
   const [compareItems, setCompareItems] = useState<{ id: string; agenda: AgendaModel; colore: ColorOption; qty: number }[]>([]);
@@ -65,7 +74,46 @@ export default function App() {
 
   useEffect(() => {
     refreshAvailableCrops();
+
+    const unsubscribe = initAuth(
+      (user, token) => {
+        setGoogleUser(user);
+        setGoogleToken(token);
+      },
+      () => {
+        setGoogleUser(null);
+        setGoogleToken(null);
+      }
+    );
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
+
+  const handleGoogleLogin = async () => {
+    setIsLoggingIn(true);
+    try {
+      const result = await googleSignIn();
+      if (result) {
+        setGoogleUser(result.user);
+        setGoogleToken(result.accessToken);
+      }
+    } catch (err) {
+      console.error('Error signing in:', err);
+    } finally {
+      setIsLoggingIn(false);
+    }
+  };
+
+  const handleGoogleLogout = async () => {
+    try {
+      await googleLogout();
+      setGoogleUser(null);
+      setGoogleToken(null);
+    } catch (err) {
+      console.error('Logout error:', err);
+    }
+  };
 
   // Handlers for Page 1 & 2 "Confronto" list
   const handleAddToCompare = (agenda: AgendaModel, colore: ColorOption) => {
@@ -191,6 +239,8 @@ export default function App() {
         onOpenPdfCropper={() => setPdfCropperOpen(true)}
         compareCount={compareItems.length}
         cartCount={cartItems.length}
+        googleUser={googleUser}
+        onOpenAuthModal={() => setAuthModalOpen(true)}
       />
 
       {/* Main Pages router */}
@@ -263,6 +313,10 @@ export default function App() {
             codiceOrdine={codiceOrdine}
             dataCreazione={dataCreazione}
             onUpdateCartQty={handleUpdateCartQty}
+            googleUser={googleUser}
+            googleToken={googleToken}
+            onGoogleLogin={handleGoogleLogin}
+            onGoogleLogout={handleGoogleLogout}
           />
         )}
       </main>
@@ -289,6 +343,16 @@ export default function App() {
         isOpen={pdfCropperOpen}
         onClose={() => setPdfCropperOpen(false)}
         onImageSaved={handleImageSaved}
+      />
+
+      {/* Global Reserved Area Authentication Modal */}
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        googleUser={googleUser}
+        onLogin={handleGoogleLogin}
+        onLogout={handleGoogleLogout}
+        isLoggingIn={isLoggingIn}
       />
 
       <Footer />

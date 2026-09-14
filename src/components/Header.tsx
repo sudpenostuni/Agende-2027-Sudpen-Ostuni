@@ -1,5 +1,6 @@
 import React from 'react';
-import { BookOpen, Sparkles, Scissors, SlidersHorizontal, ArrowRight } from 'lucide-react';
+import { User as FirebaseUser } from 'firebase/auth';
+import { BookOpen, Sparkles, Scissors, SlidersHorizontal, ArrowRight, Lock } from 'lucide-react';
 
 interface HeaderProps {
   activePage: 'catalog' | 'compare' | 'customize' | 'checkout';
@@ -8,6 +9,8 @@ interface HeaderProps {
   onOpenPdfCropper?: () => void;
   compareCount: number;
   cartCount: number;
+  googleUser: FirebaseUser | null;
+  onOpenAuthModal: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -16,15 +19,21 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenPriceManager,
   onOpenPdfCropper,
   compareCount,
-  cartCount
+  cartCount,
+  googleUser,
+  onOpenAuthModal
 }) => {
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 transition-colors shadow-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 gap-3">
-          {/* Brand Logo */}
-          <div className="flex items-center gap-3 cursor-pointer shrink-0" onClick={() => onGoToPage('catalog')}>
-            <div className="w-10 h-10 rounded-2xl bg-white border border-slate-200 overflow-hidden flex items-center justify-center shadow-xs p-1">
+          {/* Brand Logo & Auth Trigger */}
+          <div className="flex items-center gap-3 shrink-0">
+            <div 
+              onClick={onOpenAuthModal}
+              className="w-10 h-10 rounded-2xl bg-white border border-slate-200 overflow-hidden flex items-center justify-center shadow-xs p-1 cursor-pointer hover:border-slate-400 hover:scale-105 transition-all relative group"
+              title={googleUser ? `Area Riservata: ${googleUser.displayName} (Clicca per scollegare)` : "Accedi con Google"}
+            >
               <img
                 src="/sudpen-logo.png"
                 alt="SUDPEN"
@@ -34,8 +43,15 @@ export const Header: React.FC<HeaderProps> = ({
                   (e.currentTarget as HTMLImageElement).src = '/sudpen-icon.png';
                 }}
               />
+              {/* Status Dot badge */}
+              <div className={`absolute -bottom-1 -right-1 w-4.5 h-4.5 rounded-full border-2 border-white flex items-center justify-center text-[8px] text-white font-bold shadow-xs ${
+                googleUser ? 'bg-emerald-500' : 'bg-amber-500'
+              }`}>
+                {googleUser ? '✓' : '🔑'}
+              </div>
             </div>
-            <div>
+            
+            <div className="cursor-pointer" onClick={() => onGoToPage('catalog')}>
               <div className="flex items-center gap-1.5">
                 <span className="text-xl font-black tracking-tight text-slate-900">
                   AGENDE <span className="text-[#9e2a3b]">SUDPEN</span>
@@ -134,36 +150,47 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Right Tools & CTAs */}
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* Quick Tools: Sandbox only */}
-            {typeof window !== 'undefined' && 
-             (window.location.hostname.includes('localhost') || 
-              window.location.hostname.includes('ais-dev') || 
-              window.location.hostname.includes('127.0.0.1')) ? (
-              <>
-                {onOpenPdfCropper && (
-                  <button
-                    onClick={onOpenPdfCropper}
-                    className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-bold text-[#9e2a3b] bg-[#faebed] border border-[#f5c2c7] hover:opacity-90 transition"
-                    title="Scontorna e ritaglia immagini dal PDF"
-                  >
-                    <Scissors className="w-3.5 h-3.5" />
-                    <span className="hidden xl:inline">Ritaglio PDF</span>
-                    <span className="bg-[#9e2a3b] text-white text-[9px] px-1 rounded font-mono">44/44</span>
-                  </button>
+            {/* Quick Tools */}
+            {onOpenPdfCropper && (
+              <button
+                onClick={googleUser ? onOpenPdfCropper : onOpenAuthModal}
+                className={`hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-bold transition duration-150 cursor-pointer ${
+                  googleUser 
+                    ? 'text-[#9e2a3b] bg-[#faebed] border border-[#f5c2c7] hover:opacity-90' 
+                    : 'text-slate-400 bg-slate-50 border border-slate-200 hover:bg-slate-100 hover:text-slate-600'
+                }`}
+                title="Scontorna e ritaglia immagini dal PDF (Richiede Accesso)"
+              >
+                {googleUser ? (
+                  <Scissors className="w-3.5 h-3.5" />
+                ) : (
+                  <Lock className="w-3.5 h-3.5" />
                 )}
+                <span className="hidden xl:inline font-bold">Ritaglio PDF</span>
+                {googleUser && (
+                  <span className="bg-[#9e2a3b] text-white text-[9px] px-1 rounded font-mono">44/44</span>
+                )}
+              </button>
+            )}
 
-                {onOpenPriceManager && (
-                  <button
-                    onClick={onOpenPriceManager}
-                    className="hidden xl:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-100 border border-slate-200 transition"
-                    title="Modifica prezzi e disponibilità"
-                  >
-                    <SlidersHorizontal className="w-3.5 h-3.5" />
-                    <span>Listino</span>
-                  </button>
+            {onOpenPriceManager && (
+              <button
+                onClick={googleUser ? onOpenPriceManager : onOpenAuthModal}
+                className={`hidden xl:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-bold transition duration-150 cursor-pointer ${
+                  googleUser 
+                    ? 'text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 hover:text-slate-950 shadow-3xs' 
+                    : 'text-slate-400 bg-slate-50 border border-slate-200 hover:bg-slate-100 hover:text-slate-600'
+                }`}
+                title="Modifica prezzi e disponibilità (Richiede Accesso)"
+              >
+                {googleUser ? (
+                  <SlidersHorizontal className="w-3.5 h-3.5" />
+                ) : (
+                  <Lock className="w-3.5 h-3.5" />
                 )}
-              </>
-            ) : null}
+                <span className="font-bold">Listino</span>
+              </button>
+            )}
 
             {/* Cart Quick Indicator */}
             {cartCount > 0 && activePage !== 'checkout' && (

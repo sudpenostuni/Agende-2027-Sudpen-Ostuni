@@ -1,8 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AgendaModel, ColorOption } from '../types';
 import { TECNICHE_STAMPA, calculateQuotation } from '../data/catalog';
 import html2canvas from 'html2canvas-pro';
 import confetti from 'canvas-confetti';
+import { User as FirebaseUser } from 'firebase/auth';
+import {
+  initAuth,
+  googleSignIn,
+  googleLogout,
+  getAccessToken,
+  getOrCreateFolder,
+  uploadPngToDrive
+} from '../utils/driveService';
 import {
   Download,
   Printer,
@@ -21,7 +30,10 @@ import {
   Building,
   FileEdit,
   Sparkles,
-  ShoppingBag
+  ShoppingBag,
+  CloudLightning,
+  CheckCircle2,
+  LogOut
 } from 'lucide-react';
 
 interface CartItem {
@@ -51,6 +63,10 @@ interface OrderSheetProps {
   codiceOrdine: string;
   dataCreazione: string;
   onUpdateCartQty: (id: string, qty: number) => void;
+  googleUser: FirebaseUser | null;
+  googleToken: string | null;
+  onGoogleLogin: () => Promise<void>;
+  onGoogleLogout: () => Promise<void>;
 }
 
 const SUDPEN_WA = '393917972545';
@@ -69,11 +85,63 @@ export const OrderSheet: React.FC<OrderSheetProps> = ({
   onChangeCliente,
   codiceOrdine,
   dataCreazione,
-  onUpdateCartQty
+  onUpdateCartQty,
+  googleUser,
+  googleToken,
+  onGoogleLogin,
+  onGoogleLogout
 }) => {
   const [isGeneratingPng, setIsGeneratingPng] = useState(false);
   const [copied, setCopied] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const [isUploadingToDrive, setIsUploadingToDrive] = useState(false);
+  const [driveFileUrl, setDriveFileUrl] = useState<string | null>(null);
+
+  const handleSaveToGoogleDrive = async () => {
+    const token = googleToken || getAccessToken();
+    if (!token) {
+      showToast('Per favore, effettua l\'accesso con Google prima.');
+      return;
+    }
+
+    const sheetElement = document.getElementById('scheda-ordine');
+    if (!sheetElement) return;
+
+    try {
+      setIsUploadingToDrive(true);
+      showToast('Generazione scheda e caricamento su Google Drive...');
+
+      const canvas = await html2canvas(sheetElement, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff'
+      });
+      const dataUrl = canvas.toDataURL('image/png');
+
+      const folderId = await getOrCreateFolder(token);
+      const fileName = `Scheda-Tecnica-${codiceOrdine}.png`;
+      const fileData = await uploadPngToDrive(token, fileName, dataUrl, folderId);
+
+      if (fileData && fileData.webViewLink) {
+        setDriveFileUrl(fileData.webViewLink);
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.7 }
+        });
+        showToast('Salvato con successo nel tuo Google Drive!');
+      } else {
+        throw new Error('Nessun link al file restituito');
+      }
+    } catch (err) {
+      console.error('Error saving to Google Drive:', err);
+      showToast('Errore durante il salvataggio su Google Drive.');
+    } finally {
+      setIsUploadingToDrive(false);
+    }
+  };
 
   const tecnicaObj = TECNICHE_STAMPA.find((t) => t.id === tecnica) || TECNICHE_STAMPA[0];
 
@@ -479,6 +547,95 @@ export const OrderSheet: React.FC<OrderSheetProps> = ({
           <div className="text-[10px] text-slate-400 border-t border-slate-200 pt-3 flex flex-col sm:flex-row justify-between items-center gap-2">
             <span>SUDPEN Ostuni • Tipografia, Stampa & Cartoleria • Via Cav. Vittorio Veneto 56</span>
             <span className="font-mono">Generato il {dataCreazione} • ID Preventivo: {codiceOrdine}</span>
+          </div>
+        </div>
+
+        {/* --- GOOGLE DRIVE INTEGRATION PANEL --- */}
+        <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 mt-8">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex items-start gap-3">
+              <div className="p-3 bg-blue-50 text-blue-600 rounded-2xl border border-blue-100">
+                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19.43 12.98l-6.72-11.6c-.36-.62-.99-.98-1.71-.98s-1.35.36-1.71.98L2.57 12.98c-.36.62-.36 1.34 0 1.96l6.72 11.6c.36.62.99.98 1.71.98s1.35-.36 1.71-.98l6.72-11.6c.36-.62.36-1.34 0-1.96zm-9.33-9.66h3.8l5.86 10.15h-3.8l-5.86-10.15zm-1.9 13.15l1.9-3.3 5.86 10.15H12.1l-1.9-3.3zm3.17-2.15l-3.8 6.57H2.1l3.8-6.57h5.86z"/>
+                </svg>
+              </div>
+              <div className="text-left">
+                <h3 className="text-sm font-extrabold text-slate-900">Salva su Google Drive</h3>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Archivia la scheda grafica del tuo preventivo direttamente nel tuo cloud personale in una cartella dedicata "Agende Sudpen 2027".
+                </p>
+              </div>
+            </div>
+
+            <div className="flex wrap items-center gap-3">
+              {!googleUser ? (
+                <button
+                  type="button"
+                  onClick={onGoogleLogin}
+                  className="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-4 py-2.5 rounded-xl text-xs font-bold shadow-3xs hover:shadow-2xs transition active:scale-95 cursor-pointer"
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 24 24">
+                    <path fill="#EA4335" d="M12 5.04c1.66 0 3.2.57 4.38 1.69l3.27-3.27C17.67 1.48 14.99 1 12 1 7.35 1 3.37 3.67 1.39 7.56l3.89 3.02C6.18 7.39 8.84 5.04 12 5.04z" />
+                    <path fill="#4285F4" d="M23.49 12.27c0-.81-.07-1.59-.2-2.34H12v4.43h6.46c-.28 1.47-1.11 2.71-2.36 3.55l3.66 2.84c2.14-1.97 3.39-4.88 3.39-8.48z" />
+                    <path fill="#FBBC05" d="M5.28 14.42c-.24-.71-.38-1.47-.38-2.26s.14-1.55.38-2.26L1.39 6.88C.51 8.64 0 10.6 0 12.69s.51 4.05 1.39 5.81l3.89-3.08z" />
+                    <path fill="#34A853" d="M12 23c3.24 0 5.97-1.07 7.96-2.91l-3.66-2.84c-1.01.68-2.3 1.09-4.3 1.09-3.16 0-5.82-2.35-6.78-5.54l-3.89 3.02C3.37 20.33 7.35 23 12 23z" />
+                  </svg>
+                  <span>Accedi con Google</span>
+                </button>
+              ) : (
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2 bg-white border border-slate-200 px-3 py-1.5 rounded-xl shadow-3xs">
+                    {googleUser.photoURL ? (
+                      <img src={googleUser.photoURL} alt={googleUser.displayName || 'User'} className="w-5 h-5 rounded-full" referrerPolicy="no-referrer" />
+                    ) : (
+                      <div className="w-5 h-5 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-[10px] font-bold font-sans">
+                        {googleUser.displayName?.charAt(0) || 'U'}
+                      </div>
+                    )}
+                    <div className="text-left">
+                      <p className="text-[10px] font-extrabold text-slate-800 leading-none">{googleUser.displayName}</p>
+                      <p className="text-[9px] text-slate-400 leading-none mt-0.5">{googleUser.email}</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={onGoogleLogout}
+                      className="text-slate-400 hover:text-red-500 p-0.5 rounded transition cursor-pointer ml-1"
+                      title="Scollega account"
+                    >
+                      <LogOut className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+
+                  {!driveFileUrl ? (
+                    <button
+                      type="button"
+                      onClick={handleSaveToGoogleDrive}
+                      disabled={isUploadingToDrive}
+                      className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-sm hover:shadow-md transition active:scale-95 disabled:opacity-50 cursor-pointer"
+                    >
+                      {isUploadingToDrive ? (
+                        <Loader2 className="w-4 h-4 animate-spin text-white" />
+                      ) : (
+                        <CheckCircle2 className="w-4 h-4 text-blue-200" />
+                      )}
+                      <span>Salva ora su Drive</span>
+                    </button>
+                  ) : (
+                    <a
+                      href={driveFileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 px-4 py-2.5 rounded-xl text-xs font-extrabold shadow-3xs transition active:scale-95 cursor-pointer"
+                    >
+                      <svg className="w-4 h-4 text-emerald-600" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
+                      </svg>
+                      <span>Apri su Google Drive ↗</span>
+                    </a>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
