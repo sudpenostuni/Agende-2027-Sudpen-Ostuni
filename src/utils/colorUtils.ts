@@ -76,6 +76,30 @@ const COLOR_ALIASES_MAP: Record<string, string[]> = {
   'verde-mela': ['verde-mela', 'verdemela', 'salvia', 'lime', 'verde-chiaro']
 };
 
+const STATIC_COVERS_FALLBACK: string[] = [
+  '110.jpg', '111.jpg', '112.jpg', '121.jpg', '124.jpg', '126.jpg', '128.jpg', '131.jpg', '132.jpg',
+  '134.jpg', '137.jpg', '139.jpg', '140.jpg', '142.jpg', '143.jpg', '144.jpg', '148.jpg', '153.jpg',
+  '158.jpg', '159.jpg', '179.jpg', '180.jpg', '70126.jpg', '70226.jpg', '70326.jpg', '70426.jpg',
+  '70526.jpg', '70626.jpg', '70726.jpg', '70826.jpg', '71026.jpg', '71126.jpg', '71226.jpg',
+  '71926.jpg', '72126-C.jpg', '72126.jpg', '73226.jpg', '73326.jpg', '73426.jpg', '73526.jpg',
+  '74726.jpg', '75226.jpg', 'Q24113.jpg', 'amely.jpg',
+  'amely_beige.jpg', 'amely_blu.jpg', 'amely_grigio.jpg', 'amely_nero.jpg',
+  'emeri.jpg', 'emeri_arancione.jpg', 'emeri_beige.jpg', 'emeri_blu-navy.jpg', 'emeri_blu.jpg',
+  'emeri_nero.jpg', 'emeri_rosso.jpg', 'emeri_verde.jpg', 'felicia.jpg', 'madrid.jpg',
+  'madrid_arancione.jpg', 'madrid_bianco.jpg', 'madrid_blu-navy.jpg', 'madrid_blu.jpg',
+  'madrid_bordeaux.jpg', 'madrid_nero.jpg', 'madrid_rosso.jpg', 'madrid_royal.jpg',
+  'madrid_verde-mela.jpg', 'madrid_verde-tiffany.jpg', 'madrid_verde.jpg', 'madrid_wenge.jpg',
+  'michi.jpg', 'michi_arancione.jpg', 'michi_blu-navy.jpg', 'michi_nero.jpg', 'michi_rosso.jpg',
+  'michi_royal.jpg', 'michi_verde.jpg', 'nubia.jpg', 'nubia_arancione.jpg', 'nubia_blu.jpg',
+  'nubia_bordeaux.jpg', 'nubia_celeste.jpg', 'nubia_nero.jpg', 'nubia_rosso.jpg', 'nubia_royal.jpg',
+  'nubia_verde.jpg', 'opyra.jpg', 'opyra_blu.jpg', 'opyra_nero.jpg', 'planning_blu-navy.jpg',
+  'planning_blu.jpg', 'planning_bordeaux.jpg', 'planning_nero.jpg', 'quadretti.jpg', 'rubis.jpg',
+  'rubis_arancione.jpg', 'rubis_beige.jpg', 'rubis_blu-navy.jpg', 'rubis_nero.jpg', 'rubis_rosso.jpg',
+  'rubis_royal.jpg', 'rubis_verde.jpg', 'spiralata.jpg', 'zaira.jpg', 'zaira_arancione.jpg',
+  'zaira_bianco.jpg', 'zaira_blu-navy.jpg', 'zaira_blu.jpg', 'zaira_nero.jpg', 'zaira_rosso.jpg',
+  'zaira_verde.jpg'
+];
+
 /**
  * Restituisce l'URL migliore per la copertina di un'agenda in base al colore selezionato
  * e all'elenco dei ritagli attualmente disponibili su disco.
@@ -105,8 +129,12 @@ export function resolveAgendaCoverImage(
     return { url: agenda.immaginiVariantiColore[slug], isSpecificVariant: true, colorName: selectedColor.nome };
   }
 
+  const activeCovers = (availableCoverFiles && availableCoverFiles.length > 0)
+    ? availableCoverFiles
+    : STATIC_COVERS_FALLBACK;
+
   // 3. Se abbiamo l'elenco dei file su disco, controlliamo se esiste il file specifico per questo codice o linea
-  if (availableCoverFiles && availableCoverFiles.length > 0) {
+  if (activeCovers && activeCovers.length > 0) {
     const cleanColor = slug.replace(/-\d+$/, ''); // es. 'rosso-03' -> 'rosso'
     const colorCandidatesSet = new Set<string>([slug, cleanColor]);
 
@@ -127,14 +155,14 @@ export function resolveAgendaCoverImage(
     for (const c of colorCandidates) {
       // Prova con codice specifico (es. 70126_rosso.jpg)
       const codeFileName = `${agenda.codice}_${c}.jpg`;
-      if (availableCoverFiles.includes(codeFileName)) {
+      if (activeCovers.includes(codeFileName)) {
         return { url: `/agende/covers/${codeFileName}`, isSpecificVariant: true, colorName: selectedColor.nome };
       }
 
       // Prova con chiave di linea (es. nubia_rosso.jpg)
       if (lineKey) {
         const lineFileName = `${lineKey}_${c}.jpg`;
-        if (availableCoverFiles.includes(lineFileName)) {
+        if (activeCovers.includes(lineFileName)) {
           return { url: `/agende/covers/${lineFileName}`, isSpecificVariant: true, colorName: selectedColor.nome };
         }
       }
