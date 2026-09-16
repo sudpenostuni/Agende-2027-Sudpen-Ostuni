@@ -46,6 +46,7 @@ export interface AgendaModel {
   immaginiVariantiColore?: Record<string, string>;
   prezzoBaseUnitario: number; // prezzo da listino (imponibile)
   prezzoIvaInclusa?: number; // prezzo al pubblico iva inclusa
+  giacenza?: number; // giacenza di magazzino (quantità disponibile in pezzi)
   disponibile: boolean;
   statoDisponibilita: AgendaAvailability;
   colori: ColorOption[];

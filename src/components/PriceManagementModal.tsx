@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AgendaModel, AgendaAvailability, AgendaCategory } from '../types';
-import { X, Search, RotateCcw, Save, Check, AlertCircle, Download, Tag, CheckCircle2, AlertTriangle, XCircle, SlidersHorizontal } from 'lucide-react';
+import { X, Search, RotateCcw, Save, Check, AlertCircle, Download, Tag, CheckCircle2, AlertTriangle, XCircle, SlidersHorizontal, Boxes } from 'lucide-react';
 
 interface PriceManagementModalProps {
   isOpen: boolean;
@@ -37,6 +37,35 @@ export const PriceManagementModal: React.FC<PriceManagementModalProps> = ({
     );
   };
 
+  const handleGiacenzaChange = (id: string, newGiacenzaStr: string) => {
+    const trimmed = newGiacenzaStr.trim();
+    const val = trimmed === '' ? undefined : parseInt(trimmed, 10);
+    setEditedModels((prev) =>
+      prev.map((m) => {
+        if (m.id !== id) return m;
+        const newGiacenza = val === undefined || isNaN(val) ? undefined : Math.max(0, val);
+
+        let newStatus = m.statoDisponibilita;
+        let newDisponibile = m.disponibile;
+
+        if (newGiacenza === 0) {
+          newStatus = 'esaurito';
+          newDisponibile = false;
+        } else if (typeof newGiacenza === 'number' && newGiacenza > 0 && newStatus === 'esaurito') {
+          newStatus = newGiacenza <= 10 ? 'in_esaurimento' : 'disponibile';
+          newDisponibile = true;
+        }
+
+        return {
+          ...m,
+          giacenza: newGiacenza,
+          statoDisponibilita: newStatus,
+          disponibile: newDisponibile
+        };
+      })
+    );
+  };
+
   const handleAvailabilityChange = (id: string, status: AgendaAvailability) => {
     setEditedModels((prev) =>
       prev.map((m) =>
@@ -60,7 +89,7 @@ export const PriceManagementModal: React.FC<PriceManagementModalProps> = ({
   };
 
   const handleReset = () => {
-    if (window.confirm('Sei sicuro di voler ripristinare tutti i prezzi e le disponibilità originali da catalogo?')) {
+    if (window.confirm('Sei sicuro di voler ripristinare tutti i prezzi, giacenze e le disponibilità originali da catalogo?')) {
       onResetCatalog();
       setShowSavedToast(true);
       setTimeout(() => {
@@ -87,13 +116,13 @@ export const PriceManagementModal: React.FC<PriceManagementModalProps> = ({
   };
 
   const handleExportCSV = () => {
-    const headers = 'ID,Codice,Nome,Categoria,Dimensioni,PrezzoBase,StatoDisponibilita\n';
+    const headers = 'ID,Codice,Nome,Categoria,Dimensioni,PrezzoBase,GiacenzaPezzi,StatoDisponibilita\n';
     const rows = editedModels
       .map(
         (m) =>
           `"${m.id}","${m.codice}","${m.nome}","${m.categoria}","${m.dimensioniCm}",${m.prezzoBaseUnitario.toFixed(
             2
-          )},"${m.statoDisponibilita}"`
+          )},${m.giacenza !== undefined ? m.giacenza : 0},"${m.statoDisponibilita}"`
       )
       .join('\n');
 
@@ -101,7 +130,7 @@ export const PriceManagementModal: React.FC<PriceManagementModalProps> = ({
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `listino_agende_${new Date().toISOString().slice(0, 10)}.csv`;
+    link.download = `listino_giacenze_agende_${new Date().toISOString().slice(0, 10)}.csv`;
     link.click();
     URL.revokeObjectURL(url);
   };
@@ -120,6 +149,7 @@ export const PriceManagementModal: React.FC<PriceManagementModalProps> = ({
   const availableCount = editedModels.filter((m) => m.statoDisponibilita === 'disponibile').length;
   const lowStockCount = editedModels.filter((m) => m.statoDisponibilita === 'in_esaurimento').length;
   const outOfStockCount = editedModels.filter((m) => m.statoDisponibilita === 'esaurito').length;
+  const totalGiacenza = editedModels.reduce((sum, m) => sum + (m.giacenza ?? 0), 0);
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6">
@@ -157,6 +187,10 @@ export const PriceManagementModal: React.FC<PriceManagementModalProps> = ({
           <div className="flex items-center gap-3 flex-wrap">
             <span className="font-semibold text-slate-700">
               Totale Modelli: <strong className="text-blue-600">{editedModels.length}</strong>
+            </span>
+            <span className="inline-flex items-center gap-1.5 text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded border border-slate-200 font-semibold">
+              <Boxes className="w-3.5 h-3.5 text-blue-600" />
+              Giacenza Totale: <strong className="text-blue-700 font-mono">{totalGiacenza.toLocaleString()} pz</strong>
             </span>
             <span className="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-medium">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
@@ -230,12 +264,13 @@ export const PriceManagementModal: React.FC<PriceManagementModalProps> = ({
             <table className="w-full text-left border-collapse text-xs">
               <thead>
                 <tr className="bg-slate-100/90 text-slate-600 font-bold border-b border-slate-200 uppercase tracking-wider text-[10px]">
-                  <th className="py-3 px-3 w-12 text-center">#</th>
-                  <th className="py-3 px-3 w-28">Codice</th>
+                  <th className="py-3 px-3 w-10 text-center">#</th>
+                  <th className="py-3 px-3 w-24">Codice</th>
                   <th className="py-3 px-3">Modello & Specifiche</th>
                   <th className="py-3 px-3 w-28">Categoria</th>
                   <th className="py-3 px-3 w-32 text-center">Prezzo Base (€/pz)</th>
-                  <th className="py-3 px-3 w-40 text-center">Stato Magazzino</th>
+                  <th className="py-3 px-3 w-28 text-center">Giacenza (Pz)</th>
+                  <th className="py-3 px-3 w-36 text-center">Stato Magazzino</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -293,6 +328,23 @@ export const PriceManagementModal: React.FC<PriceManagementModalProps> = ({
                         </div>
                       </td>
                       <td className="py-2.5 px-3 text-center">
+                        <div className="inline-flex items-center border border-slate-300 rounded-lg overflow-hidden bg-white shadow-xs focus-within:ring-2 focus-within:ring-blue-500">
+                          <input
+                            type="number"
+                            min="0"
+                            step="1"
+                            placeholder="0"
+                            value={item.giacenza !== undefined ? item.giacenza : ''}
+                            onChange={(e) => handleGiacenzaChange(item.id, e.target.value)}
+                            className="w-16 px-2 py-1 text-xs font-bold text-slate-900 text-center focus:outline-hidden"
+                            title="Inserisci la quantità in giacenza per questo modello"
+                          />
+                          <span className="px-1.5 py-1 bg-slate-100 text-slate-500 text-[10px] font-bold border-l border-slate-200">
+                            pz
+                          </span>
+                        </div>
+                      </td>
+                      <td className="py-2.5 px-3 text-center">
                         <select
                           value={item.statoDisponibilita}
                           onChange={(e) =>
@@ -317,7 +369,7 @@ export const PriceManagementModal: React.FC<PriceManagementModalProps> = ({
 
                 {filtered.length === 0 && (
                   <tr>
-                    <td colSpan={6} className="text-center py-12 text-slate-400">
+                    <td colSpan={7} className="text-center py-12 text-slate-400">
                       Nessuna agenda trovata con i filtri attuali.
                     </td>
                   </tr>

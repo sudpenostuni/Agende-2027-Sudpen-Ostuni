@@ -1,9 +1,25 @@
-import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, User } from 'firebase/auth';
-import firebaseConfig from '../../firebase-applet-config.json';
+import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
+import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut, User, Auth } from 'firebase/auth';
+import { firebaseConfig, isFirebaseConfigured } from '../config/firebaseConfig';
 
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
-export const auth = getAuth(app);
+let appInstance: FirebaseApp | null = null;
+let authInstance: Auth | null = null;
+
+export const getAuthInstance = (): Auth | null => {
+  if (authInstance) return authInstance;
+  if (!isFirebaseConfigured) {
+    console.warn('Firebase is not configured or apiKey is missing.');
+    return null;
+  }
+  try {
+    appInstance = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+    authInstance = getAuth(appInstance);
+    return authInstance;
+  } catch (err) {
+    console.error('Error initializing Firebase Auth:', err);
+    return null;
+  }
+};
 
 const provider = new GoogleAuthProvider();
 // Add required Google Drive scopes
@@ -18,23 +34,38 @@ export const initAuth = (
   onAuthSuccess?: (user: User, token: string) => void,
   onAuthFailure?: () => void
 ) => {
-  return onAuthStateChanged(auth, async (user: User | null) => {
-    if (user) {
-      if (cachedAccessToken) {
-        if (onAuthSuccess) onAuthSuccess(user, cachedAccessToken);
-      } else if (!isSigningIn) {
+  const auth = getAuthInstance();
+  if (!auth) {
+    if (onAuthFailure) onAuthFailure();
+    return () => {};
+  }
+  try {
+    return onAuthStateChanged(auth, async (user: User | null) => {
+      if (user) {
+        if (cachedAccessToken) {
+          if (onAuthSuccess) onAuthSuccess(user, cachedAccessToken);
+        } else if (!isSigningIn) {
+          cachedAccessToken = null;
+          if (onAuthFailure) onAuthFailure();
+        }
+      } else {
         cachedAccessToken = null;
         if (onAuthFailure) onAuthFailure();
       }
-    } else {
-      cachedAccessToken = null;
-      if (onAuthFailure) onAuthFailure();
-    }
-  });
+    });
+  } catch (err) {
+    console.error('Error in onAuthStateChanged:', err);
+    if (onAuthFailure) onAuthFailure();
+    return () => {};
+  }
 };
 
 // Start Google sign-in
 export const googleSignIn = async (): Promise<{ user: User; accessToken: string } | null> => {
+  const auth = getAuthInstance();
+  if (!auth) {
+    throw new Error('Configurazione Firebase mancante o non valida. Verifica le credenziali.');
+  }
   try {
     isSigningIn = true;
     const result = await signInWithPopup(auth, provider);
@@ -59,7 +90,14 @@ export const getAccessToken = (): string | null => {
 
 // Handle logout
 export const googleLogout = async () => {
-  await auth.signOut();
+  const auth = getAuthInstance();
+  if (auth) {
+    try {
+      await signOut(auth);
+    } catch (err) {
+      console.error('Error during signOut:', err);
+    }
+  }
   cachedAccessToken = null;
 };
 

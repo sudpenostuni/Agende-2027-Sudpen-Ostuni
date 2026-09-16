@@ -416,9 +416,22 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
 
                             {/* Riga 2: cm [Formato] - cod [Codice]    € [Prezzo] iva incl. */}
                             <div className="flex items-baseline justify-between gap-2 mt-1.5">
-                              <span className="text-xs font-semibold text-slate-600 font-mono tracking-tight">
-                                {headerInfo.misuraCodice}
-                              </span>
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <span className="text-xs font-semibold text-slate-600 font-mono tracking-tight">
+                                  {headerInfo.misuraCodice}
+                                </span>
+                                {typeof agenda.giacenza === 'number' && (
+                                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${
+                                    agenda.giacenza === 0
+                                      ? 'bg-rose-50 text-rose-700 border-rose-200'
+                                      : agenda.giacenza <= 10
+                                      ? 'bg-amber-50 text-amber-700 border-amber-200'
+                                      : 'bg-slate-50 text-slate-600 border-slate-200'
+                                  }`}>
+                                    {agenda.giacenza === 0 ? 'Giacenza 0' : `Giac. ${agenda.giacenza} pz`}
+                                  </span>
+                                )}
+                              </div>
 
                               {/* Prezzo iva incl. */}
                               <div className="text-right whitespace-nowrap">
@@ -476,6 +489,15 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
                               code={agenda.codice}
                               primaryColor={activeColor?.hex || agenda.colori?.[0]?.hex}
                             />
+                            {agenda.statoDisponibilita === 'esaurito' ? (
+                              <span className="absolute top-3 left-3 bg-rose-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow">
+                                Esaurito
+                              </span>
+                            ) : agenda.statoDisponibilita === 'in_esaurimento' ? (
+                              <span className="absolute top-3 left-3 bg-amber-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow">
+                                In esaurimento
+                              </span>
+                            ) : null}
                             {isAddedThisColor && (
                               <span className="absolute top-3 right-3 bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow flex items-center gap-1">
                                 <span className="w-1.5 h-1.5 bg-white rounded-full animate-ping" />

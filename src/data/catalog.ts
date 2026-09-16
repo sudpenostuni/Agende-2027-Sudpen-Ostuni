@@ -32,6 +32,7 @@ export function loadStoredCatalog(): AgendaModel[] {
               ...def,
               prezzoBaseUnitario: typeof matched.prezzoBaseUnitario === 'number' ? matched.prezzoBaseUnitario : def.prezzoBaseUnitario,
               prezzoIvaInclusa: typeof matched.prezzoIvaInclusa === 'number' ? matched.prezzoIvaInclusa : def.prezzoIvaInclusa,
+              giacenza: typeof matched.giacenza === 'number' ? matched.giacenza : def.giacenza,
               statoDisponibilita: matched.statoDisponibilita || def.statoDisponibilita,
               disponibile: matched.disponibile !== undefined ? matched.disponibile : def.disponibile,
               immagine: def.immagine,
