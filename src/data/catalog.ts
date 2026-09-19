@@ -5,6 +5,39 @@ import { TUTTI_MODELLI_ORGANIZZATI, CATEGORIE_ORGANIZZATE, OrganizedCategory, ge
 export { CATEGORIE_ORGANIZZATE, TUTTI_MODELLI_ORGANIZZATI, getAgendaHeaderDisplay };
 export type { OrganizedCategory };
 
+export const FATTURA_OVERRIRE: Record<string, { prezzo: number; giacenza: number }> = {
+  '73226': { prezzo: 0.671, giacenza: 12 },
+  '72126': { prezzo: 1.326, giacenza: 12 },
+  '144': { prezzo: 0.920, giacenza: 12 },
+  '70126': { prezzo: 0.640, giacenza: 12 },
+  '70826': { prezzo: 1.412, giacenza: 10 },
+  '134': { prezzo: 1.326, giacenza: 10 },
+  '70226': { prezzo: 1.367, giacenza: 6 },
+  '73526': { prezzo: 1.388, giacenza: 12 },
+  '71126': { prezzo: 1.825, giacenza: 12 },
+  '143': { prezzo: 1.872, giacenza: 24 },
+  '70426': { prezzo: 1.708, giacenza: 24 },
+  '73326': { prezzo: 1.834, giacenza: 24 },
+  '74726': { prezzo: 2.003, giacenza: 24 },
+  '71026': { prezzo: 2.186, giacenza: 24 },
+  '70726': { prezzo: 2.605, giacenza: 12 },
+  '124': { prezzo: 4.321, giacenza: 8 },
+  '121': { prezzo: 5.928, giacenza: 10 },
+  '125': { prezzo: 9.079, giacenza: 3 },
+  '110': { prezzo: 2.153, giacenza: 12 },
+  '131': { prezzo: 1.872, giacenza: 24 },
+  '140': { prezzo: 2.059, giacenza: 12 },
+  '70526': { prezzo: 2.164, giacenza: 6 },
+  '139': { prezzo: 3.276, giacenza: 6 },
+  '75226': { prezzo: 3.089, giacenza: 6 },
+  '137': { prezzo: 3.884, giacenza: 6 },
+  '70626': { prezzo: 1.716, giacenza: 6 },
+  '73426': { prezzo: 1.700, giacenza: 6 },
+  '142': { prezzo: 2.028, giacenza: 6 },
+  '111': { prezzo: 1.992, giacenza: 6 },
+  '148': { prezzo: 1.872, giacenza: 12 }
+};
+
 // Unisci i modelli organizzati come prioritari, seguiti dagli altri modelli ancora da categorizzare
 const organizedCodes = new Set(TUTTI_MODELLI_ORGANIZZATI.map(m => m.codice));
 const remainingModels = LISTA_AGENDE_DEFAULT.filter(m => !organizedCodes.has(m.codice) && m.codice !== '134' && m.codice !== '143').map(m => ({
@@ -15,9 +48,22 @@ const remainingModels = LISTA_AGENDE_DEFAULT.filter(m => !organizedCodes.has(m.c
 export const LISTA_UNIFICATA_AGENDE: AgendaModel[] = [
   ...TUTTI_MODELLI_ORGANIZZATI,
   ...remainingModels
-];
+]
+  .filter((m) => FATTURA_OVERRIRE[m.codice] !== undefined)
+  .map((m) => {
+    const override = FATTURA_OVERRIRE[m.codice];
+    return {
+      ...m,
+      prezzoAcquisto: override.prezzo,
+      prezzoBaseUnitario: m.prezzoBaseUnitario,
+      prezzoIvaInclusa: Number((m.prezzoBaseUnitario * 1.22).toFixed(2)),
+      giacenza: override.giacenza,
+      disponibile: override.giacenza > 0,
+      statoDisponibilita: override.giacenza === 0 ? 'esaurito' : m.statoDisponibilita
+    };
+  });
 
-const STORAGE_KEY = 'agendapro_custom_catalog_v6';
+const STORAGE_KEY = 'agendapro_custom_catalog_v8';
 
 export function loadStoredCatalog(): AgendaModel[] {
   try {
@@ -32,6 +78,7 @@ export function loadStoredCatalog(): AgendaModel[] {
               ...def,
               prezzoBaseUnitario: typeof matched.prezzoBaseUnitario === 'number' ? matched.prezzoBaseUnitario : def.prezzoBaseUnitario,
               prezzoIvaInclusa: typeof matched.prezzoIvaInclusa === 'number' ? matched.prezzoIvaInclusa : def.prezzoIvaInclusa,
+              prezzoAcquisto: typeof matched.prezzoAcquisto === 'number' ? matched.prezzoAcquisto : def.prezzoAcquisto,
               giacenza: typeof matched.giacenza === 'number' ? matched.giacenza : def.giacenza,
               statoDisponibilita: matched.statoDisponibilita || def.statoDisponibilita,
               disponibile: matched.disponibile !== undefined ? matched.disponibile : def.disponibile,

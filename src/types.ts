@@ -44,8 +44,9 @@ export interface AgendaModel {
   immagine: string;
   immagineInterno?: string;
   immaginiVariantiColore?: Record<string, string>;
-  prezzoBaseUnitario: number; // prezzo da listino (imponibile)
+  prezzoBaseUnitario: number; // prezzo da listino di vendita (imponibile)
   prezzoIvaInclusa?: number; // prezzo al pubblico iva inclusa
+  prezzoAcquisto?: number; // prezzo d'acquisto all'ingrosso iva esclusa (dalla fattura)
   giacenza?: number; // giacenza di magazzino (quantità disponibile in pezzi)
   disponibile: boolean;
   statoDisponibilita: AgendaAvailability;

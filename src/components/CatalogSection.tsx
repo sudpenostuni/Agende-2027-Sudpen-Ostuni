@@ -15,7 +15,9 @@ import {
   Layers,
   Palette,
   Heart,
-  ChevronDown
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 
 interface CatalogSectionProps {
@@ -129,6 +131,67 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
 
   // Riferimenti ai container di scroll per i caroselli
   const carouselRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const animatedCarousels = useRef<Record<string, boolean>>({});
+
+  // Resetta i caroselli già animati al cambio di tab o ricerca per consentire un nuovo suggerimento
+  useEffect(() => {
+    animatedCarousels.current = {};
+  }, [selectedCategoryTab, searchQuery]);
+
+  // Suggerimento visuale di scorrimento (Swipe Peek) su mobile quando l'elemento entra nello schermo
+  useEffect(() => {
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    if (!isMobile) return;
+
+    const observers: IntersectionObserver[] = [];
+
+    // Usiamo un piccolo timeout per attendere che gli elementi siano pronti e misurabili
+    const initTimer = setTimeout(() => {
+      Object.keys(carouselRefs.current).forEach((catId) => {
+        const el = carouselRefs.current[catId];
+        if (!el) return;
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                if (el && el.scrollWidth > el.clientWidth && !animatedCarousels.current[catId]) {
+                  animatedCarousels.current[catId] = true;
+
+                  // Avvia l'effetto peek di scorrimento laterale
+                  setTimeout(() => {
+                    if (el) {
+                      el.scrollTo({ left: 120, behavior: 'smooth' });
+                      
+                      setTimeout(() => {
+                        if (el) {
+                          el.scrollTo({ left: 0, behavior: 'smooth' });
+                        }
+                      }, 1000);
+                    }
+                  }, 200);
+                }
+                // Smettiamo di osservare una volta che l'animazione è stata avviata
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          {
+            threshold: 0.5, // Si attiva quando almeno il 50% (la prima metà) del carosello è visibile
+            rootMargin: '0px 0px -10px 0px'
+          }
+        );
+
+        observer.observe(el);
+        observers.push(observer);
+      });
+    }, 500);
+
+    return () => {
+      clearTimeout(initTimer);
+      observers.forEach((obs) => obs.disconnect());
+    };
+  }, [selectedCategoryTab, searchQuery]);
 
   const showToast = (text: string, waUrl?: string) => {
     setToastInfo({ text, waUrl });
@@ -167,10 +230,7 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
   });
 
   // Crea i gruppi per ciascuna categoria organizzata
-  const displayedCategories: {
-    category: OrganizedCategory;
-    models: AgendaModel[];
-  }[] = CATEGORIE_ORGANIZZATE.map((cat) => {
+  const displayedCategories = CATEGORIE_ORGANIZZATE.map((cat) => {
     // Risolvi i modelli con i dati aggiornati dallo stato `models`
     const resolvedModels = cat.modelli.map((m) => {
       const fromCurrent = modelsMap.get(m.codice) || modelsMap.get(m.id);
@@ -182,14 +242,14 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
           prezzoIvaInclusa: Number((fromCurrent.prezzoBaseUnitario * 1.22).toFixed(2))
         };
       }
-      return m;
-    });
+      return null;
+    }).filter(Boolean) as AgendaModel[];
 
     return {
       category: cat,
       models: resolvedModels
     };
-  });
+  }).filter((group) => group.models.length > 0);
 
   // Raccogli anche i restanti modelli (altre linee che l'utente sta imputando manualmente)
   const organizedCodes = new Set(
@@ -346,8 +406,41 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
               <div
                 key={category.id}
                 id={`categoria-${category.id}`}
-                className="relative bg-white/70 backdrop-blur-xs rounded-3xl border border-slate-200/90 p-4 sm:p-6 shadow-xs transition"
+                className="relative bg-white/70 backdrop-blur-xs rounded-3xl border border-slate-200/90 p-4 sm:p-6 shadow-xs transition animate-in fade-in duration-300"
               >
+                {/* Intestazione Formato con indicatore Swipe per mobile */}
+                <div className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-slate-100 pb-3">
+                  <div>
+                    <h3 className="text-sm sm:text-base font-black text-slate-900 tracking-tight flex items-center gap-2">
+                      <span className="w-1.5 h-3 rounded-xs bg-[#9e2a3b] inline-block" />
+                      {category.titolo}
+                    </h3>
+                    <p className="text-[10px] sm:text-xs text-slate-500 font-medium">
+                      {category.sottotitolo}
+                    </p>
+                  </div>
+
+                  {/* Frecce Desktop per scorrimento rapido */}
+                  <div className="hidden sm:flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => scrollCarousel(category.id, 'left')}
+                      className="p-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200/60 text-slate-600 transition cursor-pointer active:scale-95"
+                      title="Scorri a sinistra"
+                    >
+                      <ChevronLeft className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => scrollCarousel(category.id, 'right')}
+                      className="p-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200/60 text-slate-600 transition cursor-pointer active:scale-95"
+                      title="Scorri a destra"
+                    >
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+
                 {/* Contenitore Carosello Orizzontale Swipeable */}
                 <div
                   ref={(el) => {
