@@ -9,6 +9,8 @@ import { OrderSheet } from './components/OrderSheet';
 import { PrintTechniqueModal } from './components/PrintTechniqueModal';
 import { PriceManagementModal } from './components/PriceManagementModal';
 import { PdfCroppingTool } from './components/PdfCroppingTool';
+import { CatalogPageModal } from './components/CatalogPageModal';
+import { MobileBottomNav } from './components/MobileBottomNav';
 import { Footer } from './components/Footer';
 import { User as FirebaseUser } from 'firebase/auth';
 import { initAuth, googleSignIn, googleLogout } from './utils/driveService';
@@ -20,8 +22,17 @@ export default function App() {
   const [techniqueModalOpen, setTechniqueModalOpen] = useState(false);
   const [priceManagerOpen, setPriceManagerOpen] = useState(false);
   const [pdfCropperOpen, setPdfCropperOpen] = useState(false);
+  const [catalogPageModalOpen, setCatalogPageModalOpen] = useState(false);
+  const [catalogPageAgenda, setCatalogPageAgenda] = useState<AgendaModel | null>(null);
+  const [catalogPageColor, setCatalogPageColor] = useState<ColorOption | null>(null);
   const [catalogModels, setCatalogModels] = useState<AgendaModel[]>(() => loadStoredCatalog());
   const [availableCoverFiles, setAvailableCoverFiles] = useState<string[]>([]);
+
+  const handleOpenCatalogPage = (agenda: AgendaModel, color?: ColorOption) => {
+    setCatalogPageAgenda(agenda);
+    setCatalogPageColor(color || agenda.colori?.[0] || null);
+    setCatalogPageModalOpen(true);
+  };
 
   // Google Authentication State
   const [googleUser, setGoogleUser] = useState<FirebaseUser | null>(null);
@@ -244,7 +255,7 @@ export default function App() {
       />
 
       {/* Main Pages router */}
-      <main className="flex-1">
+      <main className="flex-1 pb-28 md:pb-0">
         {activePage === 'catalog' && (
           <CatalogSection
             models={catalogModels}
@@ -257,6 +268,7 @@ export default function App() {
               setActivePage('compare');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
+            onOpenCatalogPage={handleOpenCatalogPage}
           />
         )}
 
@@ -273,6 +285,7 @@ export default function App() {
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             availableCoverFiles={availableCoverFiles}
+            onOpenCatalogPage={handleOpenCatalogPage}
           />
         )}
 
@@ -353,6 +366,32 @@ export default function App() {
         onLogin={handleGoogleLogin}
         onLogout={handleGoogleLogout}
         isLoggingIn={isLoggingIn}
+      />
+
+      {/* Deep-dive PDF Catalog Page Modal */}
+      <CatalogPageModal
+        isOpen={catalogPageModalOpen}
+        onClose={() => setCatalogPageModalOpen(false)}
+        initialAgenda={catalogPageAgenda}
+        initialColor={catalogPageColor}
+        allModels={catalogModels}
+        onAddToCompare={handleAddToCompare}
+        isAddedToCompare={
+          catalogPageAgenda
+            ? compareItems.some(item => item.agenda.id === catalogPageAgenda.id)
+            : false
+        }
+      />
+
+      {/* MOBILE TOTAL SWIPE: Barra fissa inferiore di navigazione a step */}
+      <MobileBottomNav
+        activePage={activePage}
+        onGoToPage={(page) => {
+          setActivePage(page);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        compareCount={compareItems.length}
+        cartCount={cartItems.length}
       />
 
       <Footer />

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { AgendaModel, ColorOption } from '../types';
 import html2canvas from 'html2canvas-pro';
 import { CATEGORIE_ORGANIZZATE, OrganizedCategory, getAgendaHeaderDisplay } from '../data/catalog';
@@ -17,7 +17,10 @@ import {
   Heart,
   ChevronDown,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  BookOpen,
+  ZoomIn,
+  ArrowRight
 } from 'lucide-react';
 
 interface CatalogSectionProps {
@@ -28,6 +31,7 @@ interface CatalogSectionProps {
   onOpenPdfCropper?: () => void;
   availableCoverFiles?: string[];
   onGoToComparePage: () => void;
+  onOpenCatalogPage?: (agenda: AgendaModel, colore?: ColorOption) => void;
 }
 
 const SUDPEN_WHATSAPP = '393917972545';
@@ -115,12 +119,14 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
   onOpenPriceManager,
   onOpenPdfCropper,
   availableCoverFiles = [],
-  onGoToComparePage
+  onGoToComparePage,
+  onOpenCatalogPage
 }) => {
   const [toastInfo, setToastInfo] = useState<{ text: string; waUrl?: string } | null>(null);
   const [selectedCategoryTab, setSelectedCategoryTab] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedCardColors, setSelectedCardColors] = useState<Record<string, ColorOption>>({});
+  const [carouselActiveIndices, setCarouselActiveIndices] = useState<Record<string, number>>({});
   const [savedForLaterIds, setSavedForLaterIds] = useState<string[]>(() => {
     try {
       return JSON.parse(localStorage.getItem('saved_for_later_agendas') || '[]');
@@ -129,69 +135,75 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
     }
   });
 
+  // Handle mobile swipe tracking for carousel dots
+  const handleCarouselScroll = (categoryId: string, e: React.UIEvent<HTMLDivElement>) => {
+    const target = e.currentTarget;
+    const cardWidth = target.firstElementChild ? (target.firstElementChild as HTMLElement).offsetWidth + 20 : 300;
+    const scrollLeft = target.scrollLeft;
+    const activeIdx = Math.round(scrollLeft / cardWidth);
+    setCarouselActiveIndices(prev => {
+      if (prev[categoryId] === activeIdx) return prev;
+      return { ...prev, [categoryId]: activeIdx };
+    });
+  };
+
+  // Helper to cycle colors via swipe on mobile
+  const cycleAgendaColor = (agendaId: string, colors: ColorOption[], direction: 'next' | 'prev') => {
+    if (!colors || colors.length <= 1) return;
+    const currentColor = selectedCardColors[agendaId] || colors[0];
+    const currentIndex = colors.findIndex(c => c.nome === currentColor.nome);
+    let nextIndex = 0;
+    if (direction === 'next') {
+      nextIndex = (currentIndex + 1) % colors.length;
+    } else {
+      nextIndex = (currentIndex - 1 + colors.length) % colors.length;
+    }
+    setSelectedCardColors(prev => ({ ...prev, [agendaId]: colors[nextIndex] }));
+  };
+
   // Riferimenti ai container di scroll per i caroselli
   const carouselRefs = useRef<Record<string, HTMLDivElement | null>>({});
-  const animatedCarousels = useRef<Record<string, boolean>>({});
 
-  // Resetta i caroselli già animati al cambio di tab o ricerca per consentire un nuovo suggerimento
+  // Indicatore Swipe dopo 2 secondi di inattività
+  const [showSwipeHint, setShowSwipeHint] = useState<boolean>(false);
+  const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const resetInactivityTimer = useCallback(() => {
+    setShowSwipeHint(false);
+    if (inactivityTimerRef.current) {
+      clearTimeout(inactivityTimerRef.current);
+    }
+    inactivityTimerRef.current = setTimeout(() => {
+      setShowSwipeHint(true);
+    }, 2000);
+  }, []);
+
   useEffect(() => {
-    animatedCarousels.current = {};
-  }, [selectedCategoryTab, searchQuery]);
+    resetInactivityTimer();
 
-  // Suggerimento visuale di scorrimento (Swipe Peek) su mobile quando l'elemento entra nello schermo
-  useEffect(() => {
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-    if (!isMobile) return;
+    const handleUserActivity = () => {
+      resetInactivityTimer();
+    };
 
-    const observers: IntersectionObserver[] = [];
-
-    // Usiamo un piccolo timeout per attendere che gli elementi siano pronti e misurabili
-    const initTimer = setTimeout(() => {
-      Object.keys(carouselRefs.current).forEach((catId) => {
-        const el = carouselRefs.current[catId];
-        if (!el) return;
-
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                if (el && el.scrollWidth > el.clientWidth && !animatedCarousels.current[catId]) {
-                  animatedCarousels.current[catId] = true;
-
-                  // Avvia l'effetto peek di scorrimento laterale
-                  setTimeout(() => {
-                    if (el) {
-                      el.scrollTo({ left: 120, behavior: 'smooth' });
-                      
-                      setTimeout(() => {
-                        if (el) {
-                          el.scrollTo({ left: 0, behavior: 'smooth' });
-                        }
-                      }, 1000);
-                    }
-                  }, 200);
-                }
-                // Smettiamo di osservare una volta che l'animazione è stata avviata
-                observer.unobserve(entry.target);
-              }
-            });
-          },
-          {
-            threshold: 0.5, // Si attiva quando almeno il 50% (la prima metà) del carosello è visibile
-            rootMargin: '0px 0px -10px 0px'
-          }
-        );
-
-        observer.observe(el);
-        observers.push(observer);
-      });
-    }, 500);
+    window.addEventListener('touchstart', handleUserActivity, { passive: true });
+    window.addEventListener('touchmove', handleUserActivity, { passive: true });
+    window.addEventListener('scroll', handleUserActivity, { passive: true });
+    window.addEventListener('mousedown', handleUserActivity, { passive: true });
+    window.addEventListener('pointerdown', handleUserActivity, { passive: true });
+    window.addEventListener('keydown', handleUserActivity, { passive: true });
 
     return () => {
-      clearTimeout(initTimer);
-      observers.forEach((obs) => obs.disconnect());
+      if (inactivityTimerRef.current) {
+        clearTimeout(inactivityTimerRef.current);
+      }
+      window.removeEventListener('touchstart', handleUserActivity);
+      window.removeEventListener('touchmove', handleUserActivity);
+      window.removeEventListener('scroll', handleUserActivity);
+      window.removeEventListener('mousedown', handleUserActivity);
+      window.removeEventListener('pointerdown', handleUserActivity);
+      window.removeEventListener('keydown', handleUserActivity);
     };
-  }, [selectedCategoryTab, searchQuery]);
+  }, [resetInactivityTimer]);
 
   const showToast = (text: string, waUrl?: string) => {
     setToastInfo({ text, waUrl });
@@ -310,6 +322,18 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
 
   const totalShownModels = filteredSections.reduce((acc, sec) => acc + sec.models.length, 0);
 
+  const handleSelectMobileCategory = (catId: string) => {
+    setSelectedCategoryTab(catId);
+    if (catId !== 'all') {
+      const targetEl = document.getElementById(`categoria-${catId}`);
+      if (targetEl) {
+        targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   return (
     <section id="catalogo" className="py-10 md:py-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-20">
 
@@ -334,11 +358,11 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
       )}
 
       {/* Navigazione Rapida Formati & Ricerca */}
-      <div className="mb-8 space-y-4">
-        {/* Ricerca e Filtro */}
+      <div className="mb-6 space-y-3">
+        {/* Ricerca e Filtro Desktop Dropdown */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-          {/* Menu a Tendina Scegli Formato */}
-          <div className="flex flex-col gap-1.5 w-full sm:w-72">
+          {/* Menu a Tendina Scegli Formato (Desktop) */}
+          <div className="hidden sm:flex flex-col gap-1.5 w-full sm:w-72">
             <label htmlFor="select-formato" className="text-xs font-bold text-slate-500 uppercase tracking-wider">
               Scegli formato
             </label>
@@ -366,8 +390,6 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
               </div>
             </div>
           </div>
-
-
         </div>
 
         {searchQuery && (
@@ -408,45 +430,68 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
                 id={`categoria-${category.id}`}
                 className="relative bg-white/70 backdrop-blur-xs rounded-3xl border border-slate-200/90 p-4 sm:p-6 shadow-xs transition animate-in fade-in duration-300"
               >
-                {/* Intestazione Formato con indicatore Swipe per mobile */}
-                <div className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-slate-100 pb-3">
-                  <div>
-                    <h3 className="text-sm sm:text-base font-black text-slate-900 tracking-tight flex items-center gap-2">
-                      <span className="w-1.5 h-3 rounded-xs bg-[#9e2a3b] inline-block" />
-                      {category.titolo}
-                    </h3>
-                    <p className="text-[10px] sm:text-xs text-slate-500 font-medium">
-                      {category.sottotitolo}
-                    </p>
+                {/* Intestazione di Categoria / Formato Riorganizzata in modo Evidente */}
+                <div className="mb-4 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white rounded-2xl p-3.5 sm:p-4.5 shadow-sm border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 relative overflow-hidden">
+                  {/* Barra d'accento laterale bordeaux */}
+                  <div className="absolute top-0 left-0 bottom-0 w-1.5 bg-[#9e2a3b]" />
+                  
+                  <div className="flex items-center gap-3 pl-1.5">
+                    <div className="w-9 h-9 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center text-amber-400 shrink-0 font-mono font-black text-xs shadow-xs">
+                      <Layers className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-[10px] font-black uppercase tracking-wider text-amber-400 font-mono">
+                          Categoria Formato
+                        </span>
+                        <span className="bg-white/15 text-slate-200 text-[10px] font-bold px-2 py-0.5 rounded-full font-mono">
+                          {catModels.length} {catModels.length === 1 ? 'modello' : 'modelli'}
+                        </span>
+                      </div>
+                      <h3 className="text-sm sm:text-base md:text-lg font-black text-white tracking-tight flex items-center gap-2 mt-0.5">
+                        {category.titolo}
+                      </h3>
+                    </div>
                   </div>
 
                   {/* Frecce Desktop per scorrimento rapido */}
-                  <div className="hidden sm:flex items-center gap-1.5">
+                  <div className="hidden sm:flex items-center gap-2">
                     <button
                       type="button"
                       onClick={() => scrollCarousel(category.id, 'left')}
-                      className="p-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200/60 text-slate-600 transition cursor-pointer active:scale-95"
+                      className="p-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-white transition cursor-pointer active:scale-95 shadow-xs"
                       title="Scorri a sinistra"
                     >
-                      <ChevronLeft className="w-3.5 h-3.5" />
+                      <ChevronLeft className="w-4 h-4" />
                     </button>
                     <button
                       type="button"
                       onClick={() => scrollCarousel(category.id, 'right')}
-                      className="p-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200/60 text-slate-600 transition cursor-pointer active:scale-95"
+                      className="p-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-white transition cursor-pointer active:scale-95 shadow-xs"
                       title="Scorri a destra"
                     >
-                      <ChevronRight className="w-3.5 h-3.5" />
+                      <ChevronRight className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
+
+                {/* Etichetta di suggerimento Swipe + Freccia a destra dopo 2 secondi di inattività */}
+                {showSwipeHint && catModels.length > 1 && (
+                  <div className="sm:hidden absolute top-20 right-5 z-20 pointer-events-none animate-in fade-in slide-in-from-right-3 duration-300">
+                    <div className="flex items-center gap-1.5 bg-[#9e2a3b] text-white px-3 py-1.5 rounded-full shadow-lg border border-white/25 text-xs font-black tracking-wide uppercase">
+                      <span>Swipe</span>
+                      <ArrowRight className="w-4 h-4 text-amber-300 animate-pulse" />
+                    </div>
+                  </div>
+                )}
 
                 {/* Contenitore Carosello Orizzontale Swipeable */}
                 <div
                   ref={(el) => {
                     carouselRefs.current[category.id] = el;
                   }}
-                  className="flex gap-5 overflow-x-auto snap-x snap-mandatory py-1 px-1 scroll-smooth"
+                  onScroll={(e) => handleCarouselScroll(category.id, e)}
+                  className="flex gap-4 sm:gap-5 overflow-x-auto snap-x snap-mandatory py-2 px-1 scroll-smooth"
                   style={{
                     scrollbarWidth: 'thin',
                     scrollbarColor: '#cbd5e1 transparent'
@@ -475,7 +520,7 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
                       <div
                         id={`card-model-${agenda.id}`}
                         key={agenda.id}
-                        className={`w-[295px] sm:w-[325px] md:w-[335px] shrink-0 snap-start bg-white rounded-2xl border transition-all duration-300 flex flex-col justify-between p-5 shadow-sm hover:shadow-lg relative ${
+                        className={`w-[84vw] max-w-[320px] sm:w-[325px] md:w-[335px] shrink-0 snap-center sm:snap-start bg-white rounded-2xl border transition-all duration-300 flex flex-col justify-between p-4 sm:p-5 shadow-sm hover:shadow-lg relative ${
                           isAddedThisColor
                             ? 'border-[#9e2a3b] ring-2 ring-[#9e2a3b]/20 shadow-md'
                             : isSelected
@@ -514,7 +559,7 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
                                   {headerInfo.misuraCodice}
                                 </span>
                                 {typeof agenda.giacenza === 'number' && (
-                                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${
+                                  <span className={`hidden sm:inline-block text-[10px] font-bold px-1.5 py-0.5 rounded border ${
                                     agenda.giacenza === 0
                                       ? 'bg-rose-50 text-rose-700 border-rose-200'
                                       : agenda.giacenza <= 10
@@ -569,11 +614,18 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
                             )}
                           </div>
 
-                          {/* 3. IMMAGINE PRODOTTO CON VARIANTI DINAMICHE */}
+                          {/* 3. IMMAGINE PRODOTTO CON APPROFONDIMENTO PAGINA CATALOGO PDF */}
                           <div
-                            onClick={() => onAddToCompare(agenda, activeColor)}
-                            className="relative w-full h-56 bg-white hover:bg-slate-50/50 rounded-2xl flex items-center justify-center p-3 my-2 cursor-pointer group/img transition border border-slate-200/80 shadow-inner"
-                            title="Clicca per aggiungere questo modello/colore al confronto"
+                            id={`agenda-img-${agenda.id}`}
+                            onClick={() => {
+                              if (onOpenCatalogPage) {
+                                onOpenCatalogPage(agenda, activeColor);
+                              } else {
+                                onAddToCompare(agenda, activeColor);
+                              }
+                            }}
+                            className="relative w-full h-56 bg-white hover:bg-slate-50/70 rounded-2xl flex items-center justify-center p-3 my-2 cursor-pointer group/img transition border border-slate-200/80 hover:border-amber-400/60 shadow-inner"
+                            title="Clicca per aprire l'approfondimento della pagina catalogo PDF relativa a quest'agenda"
                           >
                             <ProductImage
                               src={coverResult.url}
@@ -582,6 +634,15 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
                               code={agenda.codice}
                               primaryColor={activeColor?.hex || agenda.colori?.[0]?.hex}
                             />
+
+                            {/* Icona Zoom per visualizzazione pagina PDF */}
+                            <div 
+                              className="absolute bottom-2.5 right-2.5 w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-white/95 backdrop-blur-xs text-slate-700 border border-slate-200/90 shadow-xs flex items-center justify-center transition-all group-hover/img:scale-110 group-hover/img:text-[#9e2a3b] pointer-events-none"
+                              title="Ingrandisci pagina catalogo PDF"
+                            >
+                              <ZoomIn className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-700 group-hover/img:text-[#9e2a3b]" />
+                            </div>
+
                             {agenda.statoDisponibilita === 'esaurito' ? (
                               <span className="absolute top-3 left-3 bg-rose-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow">
                                 Esaurito
@@ -599,8 +660,8 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
                             )}
                           </div>
 
-                          {/* 4. SOTTO L'IMMAGINE: DESCRIZIONE PRODOTTO */}
-                          <p className="text-xs text-slate-600 leading-relaxed line-clamp-2 min-h-[34px] my-2">
+                          {/* 4. SOTTO L'IMMAGINE: DESCRIZIONE PRODOTTO (visibile su desktop) */}
+                          <p className="hidden sm:block text-xs text-slate-600 leading-relaxed line-clamp-2 min-h-[34px] my-2">
                             {agenda.sottotitolo || `Agenda personalizzabile formato ${agenda.dimensioniCm}, copertina in ${agenda.copertina}, carta pregiata.`}
                           </p>
                         </div>
@@ -630,6 +691,52 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
           })}
         </div>
       )}
+
+      {/* MOBILE: Barra di selezione rapida formati posizionata sul fondo (sopra la barra di navigazione) */}
+      <div className="sm:hidden fixed bottom-14 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-slate-200/90 py-1.5 px-2 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar snap-x scroll-smooth px-1">
+          <button
+            type="button"
+            onClick={() => handleSelectMobileCategory('all')}
+            className={`snap-start px-3 py-1 rounded-full text-[11px] font-bold whitespace-nowrap transition-all shrink-0 cursor-pointer ${
+              selectedCategoryTab === 'all'
+                ? 'bg-[#9e2a3b] text-white shadow-xs scale-105'
+                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            }`}
+          >
+            Tutti ({models.length})
+          </button>
+          {CATEGORIE_ORGANIZZATE.map((cat) => (
+            <button
+              key={cat.id}
+              type="button"
+              onClick={() => handleSelectMobileCategory(cat.id)}
+              className={`snap-start px-2.5 py-1 rounded-full text-[11px] font-bold whitespace-nowrap transition-all shrink-0 flex items-center gap-1 cursor-pointer ${
+                selectedCategoryTab === cat.id
+                  ? 'bg-[#9e2a3b] text-white shadow-xs scale-105'
+                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+              }`}
+            >
+              <span>{cat.formatoLabel}</span>
+              <span className="text-[9px] opacity-75 font-mono">({cat.modelli.length})</span>
+            </button>
+          ))}
+          {remainingModels.length > 0 && (
+            <button
+              type="button"
+              onClick={() => handleSelectMobileCategory('cat-altre-linee')}
+              className={`snap-start px-2.5 py-1 rounded-full text-[11px] font-bold whitespace-nowrap transition-all shrink-0 flex items-center gap-1 cursor-pointer ${
+                selectedCategoryTab === 'cat-altre-linee'
+                  ? 'bg-[#9e2a3b] text-white shadow-xs scale-105'
+                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+              }`}
+            >
+              <span>Altre Linee</span>
+              <span className="text-[9px] opacity-75 font-mono">({remainingModels.length})</span>
+            </button>
+          )}
+        </div>
+      </div>
 
       {/* Banner Toast Flottante Notifiche Screenshot / WhatsApp */}
       {toastInfo && (

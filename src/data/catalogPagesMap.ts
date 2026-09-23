@@ -34,6 +34,7 @@ export const CATALOG_MODELS_MAP: ModelCatalogInfo[] = [
   // Pagina 9
   { code: '72126-C', name: 'Rubis Compact 72126', page: 9, category: 'Giornaliere', format: '12 x 17 cm' },
   { code: '72126', name: 'Rubis Settimanale 72126', page: 9, category: 'Settimanali', format: '15 x 21 cm' },
+  { code: '71126', name: 'Linea Rubis con elastico 71126', page: 9, category: 'Giornaliere', format: '12,5 x 18 cm' },
   // Pagina 10
   { code: '71026', name: 'Rubis Large 71026', page: 10, category: 'Giornaliere', format: '17 x 24 cm' },
   { code: '75226', name: 'Michi Large 75226', page: 10, category: 'Giornaliere', format: '17 x 24 cm' },
@@ -75,4 +76,13 @@ export function getPageImage(page: number): string {
 
 export function getModelsForPage(page: number): ModelCatalogInfo[] {
   return CATALOG_MODELS_MAP.filter(m => m.page === page);
+}
+
+export function getCatalogPageForModel(code: string): number {
+  const found = CATALOG_MODELS_MAP.find(m => m.code === code);
+  return found ? found.page : 1;
+}
+
+export function getModelCatalogInfo(code: string): ModelCatalogInfo | undefined {
+  return CATALOG_MODELS_MAP.find(m => m.code === code);
 }

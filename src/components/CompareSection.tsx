@@ -20,6 +20,7 @@ interface CompareSectionProps {
   onRemoveFromCart: (id: string) => void;
   onGoToPage: (page: 'catalog' | 'compare' | 'customize' | 'checkout') => void;
   availableCoverFiles?: string[];
+  onOpenCatalogPage?: (agenda: AgendaModel, colore?: ColorOption) => void;
 }
 
 export const CompareSection: React.FC<CompareSectionProps> = ({
@@ -30,7 +31,8 @@ export const CompareSection: React.FC<CompareSectionProps> = ({
   onAddToCart,
   onRemoveFromCart,
   onGoToPage,
-  availableCoverFiles = []
+  availableCoverFiles = [],
+  onOpenCatalogPage
 }) => {
   const getTierDiscountLabel = (qty: number): string => {
     return 'Prezzo Fisso';
@@ -90,22 +92,33 @@ export const CompareSection: React.FC<CompareSectionProps> = ({
               <div key={id} className="p-4 sm:p-6 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-6 hover:bg-slate-50/40 transition">
                 {/* 1. Thumbnail image and primary specs */}
                 <div className="flex items-center gap-4 min-w-[280px] lg:max-w-sm">
-                  {coverResult.url ? (
-                    <img
-                      src={coverResult.url}
-                      alt={`${agenda.nome} ${colore.nome}`}
-                      className="w-16 h-20 sm:w-20 sm:h-24 object-contain rounded-xl bg-slate-50 border border-slate-200/80 p-1 shrink-0 shadow-sm"
-                    />
-                  ) : (
-                    <div
-                      className="w-16 h-20 sm:w-20 sm:h-24 rounded-xl border border-slate-200 shadow-xs shrink-0 flex items-center justify-center"
-                      style={{ backgroundColor: colore.hex }}
-                    >
-                      <span className="text-[10px] font-mono font-bold text-white/95 uppercase drop-shadow-sm">
-                        2027
+                  <div
+                    onClick={() => onOpenCatalogPage?.(agenda, colore)}
+                    className="relative cursor-pointer group/thumb shrink-0"
+                    title="Clicca per aprire la pagina del catalogo PDF di questa agenda"
+                  >
+                    {coverResult.url ? (
+                      <img
+                        src={coverResult.url}
+                        alt={`${agenda.nome} ${colore.nome}`}
+                        className="w-16 h-20 sm:w-20 sm:h-24 object-contain rounded-xl bg-slate-50 border border-slate-200/80 group-hover/thumb:border-amber-400 p-1 shrink-0 shadow-sm transition"
+                      />
+                    ) : (
+                      <div
+                        className="w-16 h-20 sm:w-20 sm:h-24 rounded-xl border border-slate-200 group-hover/thumb:border-amber-400 shadow-xs shrink-0 flex items-center justify-center transition"
+                        style={{ backgroundColor: colore.hex }}
+                      >
+                        <span className="text-[10px] font-mono font-bold text-white/95 uppercase drop-shadow-sm">
+                          2027
+                        </span>
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-slate-900/0 group-hover/thumb:bg-slate-900/20 rounded-xl transition flex items-center justify-center pointer-events-none">
+                      <span className="opacity-0 group-hover/thumb:opacity-100 transition text-[9px] font-bold bg-slate-900/90 text-amber-300 px-1.5 py-0.5 rounded shadow">
+                        PDF
                       </span>
                     </div>
-                  )}
+                  </div>
 
                   <div className="space-y-1">
                     <div className="flex items-center gap-1.5 flex-wrap">
