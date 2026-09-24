@@ -19,8 +19,7 @@ import {
   ChevronLeft,
   ChevronRight,
   BookOpen,
-  ZoomIn,
-  ArrowRight
+  ZoomIn
 } from 'lucide-react';
 
 interface CatalogSectionProps {
@@ -127,6 +126,7 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedCardColors, setSelectedCardColors] = useState<Record<string, ColorOption>>({});
   const [carouselActiveIndices, setCarouselActiveIndices] = useState<Record<string, number>>({});
+  const [carouselCanScrollRight, setCarouselCanScrollRight] = useState<Record<string, boolean>>({});
   const [savedForLaterIds, setSavedForLaterIds] = useState<string[]>(() => {
     try {
       return JSON.parse(localStorage.getItem('saved_for_later_agendas') || '[]');
@@ -135,7 +135,7 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
     }
   });
 
-  // Handle mobile swipe tracking for carousel dots
+  // Handle mobile swipe tracking for carousel dots and right fade indicator
   const handleCarouselScroll = (categoryId: string, e: React.UIEvent<HTMLDivElement>) => {
     const target = e.currentTarget;
     const cardWidth = target.firstElementChild ? (target.firstElementChild as HTMLElement).offsetWidth + 20 : 300;
@@ -144,6 +144,13 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
     setCarouselActiveIndices(prev => {
       if (prev[categoryId] === activeIdx) return prev;
       return { ...prev, [categoryId]: activeIdx };
+    });
+
+    // Rileva se ci sono ancora card visibili verso destra (tolleranza 20px)
+    const hasMore = target.scrollLeft + target.clientWidth < target.scrollWidth - 20;
+    setCarouselCanScrollRight(prev => {
+      if (prev[categoryId] === hasMore) return prev;
+      return { ...prev, [categoryId]: hasMore };
     });
   };
 
@@ -163,47 +170,6 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
 
   // Riferimenti ai container di scroll per i caroselli
   const carouselRefs = useRef<Record<string, HTMLDivElement | null>>({});
-
-  // Indicatore Swipe dopo 2 secondi di inattività
-  const [showSwipeHint, setShowSwipeHint] = useState<boolean>(false);
-  const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
-
-  const resetInactivityTimer = useCallback(() => {
-    setShowSwipeHint(false);
-    if (inactivityTimerRef.current) {
-      clearTimeout(inactivityTimerRef.current);
-    }
-    inactivityTimerRef.current = setTimeout(() => {
-      setShowSwipeHint(true);
-    }, 2000);
-  }, []);
-
-  useEffect(() => {
-    resetInactivityTimer();
-
-    const handleUserActivity = () => {
-      resetInactivityTimer();
-    };
-
-    window.addEventListener('touchstart', handleUserActivity, { passive: true });
-    window.addEventListener('touchmove', handleUserActivity, { passive: true });
-    window.addEventListener('scroll', handleUserActivity, { passive: true });
-    window.addEventListener('mousedown', handleUserActivity, { passive: true });
-    window.addEventListener('pointerdown', handleUserActivity, { passive: true });
-    window.addEventListener('keydown', handleUserActivity, { passive: true });
-
-    return () => {
-      if (inactivityTimerRef.current) {
-        clearTimeout(inactivityTimerRef.current);
-      }
-      window.removeEventListener('touchstart', handleUserActivity);
-      window.removeEventListener('touchmove', handleUserActivity);
-      window.removeEventListener('scroll', handleUserActivity);
-      window.removeEventListener('mousedown', handleUserActivity);
-      window.removeEventListener('pointerdown', handleUserActivity);
-      window.removeEventListener('keydown', handleUserActivity);
-    };
-  }, [resetInactivityTimer]);
 
   const showToast = (text: string, waUrl?: string) => {
     setToastInfo({ text, waUrl });
@@ -475,29 +441,21 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
                   </div>
                 </div>
 
-                {/* Etichetta di suggerimento Swipe + Freccia a destra dopo 2 secondi di inattività */}
-                {showSwipeHint && catModels.length > 1 && (
-                  <div className="sm:hidden absolute top-20 right-5 z-20 pointer-events-none animate-in fade-in slide-in-from-right-3 duration-300">
-                    <div className="flex items-center gap-1.5 bg-[#9e2a3b] text-white px-3 py-1.5 rounded-full shadow-lg border border-white/25 text-xs font-black tracking-wide uppercase">
-                      <span>Swipe</span>
-                      <ArrowRight className="w-4 h-4 text-amber-300 animate-pulse" />
-                    </div>
-                  </div>
-                )}
-
-                {/* Contenitore Carosello Orizzontale Swipeable */}
-                <div
-                  ref={(el) => {
-                    carouselRefs.current[category.id] = el;
-                  }}
-                  onScroll={(e) => handleCarouselScroll(category.id, e)}
-                  className="flex gap-4 sm:gap-5 overflow-x-auto snap-x snap-mandatory py-2 px-1 scroll-smooth"
-                  style={{
-                    scrollbarWidth: 'thin',
-                    scrollbarColor: '#cbd5e1 transparent'
-                  }}
-                >
-                  {catModels.map((agenda) => {
+                {/* Contenitore Carosello Orizzontale */}
+                <div className="relative">
+                  {/* Contenitore Carosello Orizzontale Swipeable */}
+                  <div
+                    ref={(el) => {
+                      carouselRefs.current[category.id] = el;
+                    }}
+                    onScroll={(e) => handleCarouselScroll(category.id, e)}
+                    className="flex gap-4 sm:gap-5 overflow-x-auto snap-x snap-mandatory py-2 px-1 scroll-smooth"
+                    style={{
+                      scrollbarWidth: 'thin',
+                      scrollbarColor: '#cbd5e1 transparent'
+                    }}
+                  >
+                  {catModels.map((agenda, modelIdx) => {
                     const visibleColors = agenda.colori;
 
                     // Active preview color for this card
@@ -624,7 +582,7 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
                                 onAddToCompare(agenda, activeColor);
                               }
                             }}
-                            className="relative w-full h-56 bg-white hover:bg-slate-50/70 rounded-2xl flex items-center justify-center p-3 my-2 cursor-pointer group/img transition border border-slate-200/80 hover:border-amber-400/60 shadow-inner"
+                            className="relative w-full h-56 bg-white hover:bg-slate-50/70 rounded-2xl flex items-center justify-center p-3 my-2 cursor-pointer group/img transition border border-slate-200/80 hover:border-amber-400/60 shadow-inner overflow-hidden"
                             title="Clicca per aprire l'approfondimento della pagina catalogo PDF relativa a quest'agenda"
                           >
                             <ProductImage
@@ -635,9 +593,21 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
                               primaryColor={activeColor?.hex || agenda.colori?.[0]?.hex}
                             />
 
+                            {/* Sfumatura verde sul lato destro con effetto blinking lento applicata solo all'area immagine per suggerire lo swipe verso destra su mobile */}
+                            {catModels.length > 1 && modelIdx < catModels.length - 1 && (
+                              <div
+                                className="sm:hidden absolute top-0 right-0 bottom-0 w-12 pointer-events-none z-10 flex items-center justify-end pr-1 rounded-r-2xl overflow-hidden"
+                                aria-hidden="true"
+                              >
+                                <div className="w-full h-full bg-gradient-to-l from-emerald-500/40 via-emerald-400/20 to-transparent animate-slow-fade-blink flex items-center justify-end pr-1 shadow-[-4px_0_12px_rgba(16,185,129,0.25)]">
+                                  <ChevronRight className="w-5 h-5 text-emerald-700 drop-shadow-xs" />
+                                </div>
+                              </div>
+                            )}
+
                             {/* Icona Zoom per visualizzazione pagina PDF */}
                             <div 
-                              className="absolute bottom-2.5 right-2.5 w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-white/95 backdrop-blur-xs text-slate-700 border border-slate-200/90 shadow-xs flex items-center justify-center transition-all group-hover/img:scale-110 group-hover/img:text-[#9e2a3b] pointer-events-none"
+                              className="absolute bottom-2.5 right-2.5 z-20 w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-white/95 backdrop-blur-xs text-slate-700 border border-slate-200/90 shadow-xs flex items-center justify-center transition-all group-hover/img:scale-110 group-hover/img:text-[#9e2a3b] pointer-events-none"
                               title="Ingrandisci pagina catalogo PDF"
                             >
                               <ZoomIn className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-700 group-hover/img:text-[#9e2a3b]" />
@@ -687,8 +657,9 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
                   })}
                 </div>
               </div>
-            );
-          })}
+            </div>
+          );
+        })}
         </div>
       )}
 
