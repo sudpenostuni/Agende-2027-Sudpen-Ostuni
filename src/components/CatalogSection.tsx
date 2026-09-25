@@ -574,7 +574,7 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
                             )}
                           </div>
 
-                          {/* 3. IMMAGINE PRODOTTO CON APPROFONDIMENTO PAGINA CATALOGO PDF */}
+                          {/* 3. IMMAGINE PRODOTTO CON ZOOM E DETTAGLIO */}
                           <div
                             id={`agenda-img-${agenda.id}`}
                             onClick={() => {
@@ -585,7 +585,7 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
                               }
                             }}
                             className="relative w-full h-56 bg-white hover:bg-slate-50/70 rounded-2xl flex items-center justify-center p-3 my-2 cursor-pointer group/img transition border border-slate-200/80 hover:border-amber-400/60 shadow-inner overflow-hidden"
-                            title="Clicca per aprire l'approfondimento della pagina catalogo PDF relativa a quest'agenda"
+                            title="Clicca per ingrandire l'immagine"
                           >
                             <ProductImage
                               src={coverResult.url}
@@ -607,10 +607,10 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
                               </div>
                             )}
 
-                            {/* Icona Zoom per visualizzazione pagina PDF */}
+                            {/* Icona Zoom */}
                             <div 
                               className="absolute bottom-2.5 right-2.5 z-20 w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-white/95 backdrop-blur-xs text-slate-700 border border-slate-200/90 shadow-xs flex items-center justify-center transition-all group-hover/img:scale-110 group-hover/img:text-[#9e2a3b] pointer-events-none"
-                              title="Ingrandisci pagina catalogo PDF"
+                              title="Ingrandisci immagine"
                             >
                               <ZoomIn className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-700 group-hover/img:text-[#9e2a3b]" />
                             </div>

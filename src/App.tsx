@@ -9,6 +9,7 @@ import { OrderSheet } from './components/OrderSheet';
 import { PrintTechniqueModal } from './components/PrintTechniqueModal';
 import { PdfCroppingTool } from './components/PdfCroppingTool';
 import { CatalogPageModal } from './components/CatalogPageModal';
+import { ImageZoomModal } from './components/ImageZoomModal';
 import { MobileBottomNav } from './components/MobileBottomNav';
 import { Footer } from './components/Footer';
 
@@ -20,13 +21,42 @@ export default function App() {
   const [catalogPageModalOpen, setCatalogPageModalOpen] = useState(false);
   const [catalogPageAgenda, setCatalogPageAgenda] = useState<AgendaModel | null>(null);
   const [catalogPageColor, setCatalogPageColor] = useState<ColorOption | null>(null);
+
+  // Mobile Simple Zoom State
+  const [mobileZoomOpen, setMobileZoomOpen] = useState(false);
+  const [mobileZoomAgenda, setMobileZoomAgenda] = useState<AgendaModel | null>(null);
+  const [mobileZoomColor, setMobileZoomColor] = useState<ColorOption | null>(null);
+
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth < 768 : false
+  );
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const [catalogModels, setCatalogModels] = useState<AgendaModel[]>(() => loadStoredCatalog());
   const [availableCoverFiles, setAvailableCoverFiles] = useState<string[]>([]);
 
-  const handleOpenCatalogPage = (agenda: AgendaModel, color?: ColorOption) => {
-    setCatalogPageAgenda(agenda);
-    setCatalogPageColor(color || agenda.colori?.[0] || null);
-    setCatalogPageModalOpen(true);
+  const handleProductImageClick = (agenda: AgendaModel, color?: ColorOption) => {
+    const chosenColor = color || agenda.colori?.[0] || null;
+    if (isMobile) {
+      // Nella versione mobile (NB): elimina del tutto l'accesso all'approfondimento catalogo ufficiale
+      // e sostituisci con un semplice zoom immagine touch-friendly
+      setMobileZoomAgenda(agenda);
+      setMobileZoomColor(chosenColor);
+      setMobileZoomOpen(true);
+    } else {
+      // Versione desktop: approfondimento catalogo ufficiale
+      setCatalogPageAgenda(agenda);
+      setCatalogPageColor(chosenColor);
+      setCatalogPageModalOpen(true);
+    }
   };
 
   // Page 2 State: selections added for comparison
@@ -201,7 +231,7 @@ export default function App() {
               setActivePage('compare');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
-            onOpenCatalogPage={handleOpenCatalogPage}
+            onOpenCatalogPage={handleProductImageClick}
           />
         )}
 
@@ -218,7 +248,7 @@ export default function App() {
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             availableCoverFiles={availableCoverFiles}
-            onOpenCatalogPage={handleOpenCatalogPage}
+            onOpenCatalogPage={handleProductImageClick}
           />
         )}
 
@@ -280,17 +310,34 @@ export default function App() {
         />
       )}
 
-      {/* Deep-dive PDF Catalog Page Modal */}
-      <CatalogPageModal
-        isOpen={catalogPageModalOpen}
-        onClose={() => setCatalogPageModalOpen(false)}
-        initialAgenda={catalogPageAgenda}
-        initialColor={catalogPageColor}
-        allModels={catalogModels}
+      {/* Deep-dive PDF Catalog Page Modal: ESCLUSIVO DESKTOP (eliminato del tutto su mobile) */}
+      {!isMobile && catalogPageModalOpen && (
+        <CatalogPageModal
+          isOpen={catalogPageModalOpen}
+          onClose={() => setCatalogPageModalOpen(false)}
+          initialAgenda={catalogPageAgenda}
+          initialColor={catalogPageColor}
+          allModels={catalogModels}
+          onAddToCompare={handleAddToCompare}
+          isAddedToCompare={
+            catalogPageAgenda
+              ? compareItems.some(item => item.agenda.id === catalogPageAgenda.id)
+              : false
+          }
+        />
+      )}
+
+      {/* Semplice Zoom Immagine Touch-Friendly per la versione mobile */}
+      <ImageZoomModal
+        isOpen={mobileZoomOpen}
+        onClose={() => setMobileZoomOpen(false)}
+        agenda={mobileZoomAgenda}
+        initialColor={mobileZoomColor}
+        availableCoverFiles={availableCoverFiles}
         onAddToCompare={handleAddToCompare}
         isAddedToCompare={
-          catalogPageAgenda
-            ? compareItems.some(item => item.agenda.id === catalogPageAgenda.id)
+          mobileZoomAgenda
+            ? compareItems.some(item => item.agenda.id === mobileZoomAgenda.id)
             : false
         }
       />

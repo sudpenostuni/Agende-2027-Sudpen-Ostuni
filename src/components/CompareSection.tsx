@@ -94,7 +94,7 @@ export const CompareSection: React.FC<CompareSectionProps> = ({
                   <div
                     onClick={() => onOpenCatalogPage?.(agenda, colore)}
                     className="relative cursor-pointer group/thumb shrink-0"
-                    title="Clicca per aprire la pagina del catalogo PDF di questa agenda"
+                    title="Clicca per ingrandire l'immagine"
                   >
                     {coverResult.url ? (
                       <img
