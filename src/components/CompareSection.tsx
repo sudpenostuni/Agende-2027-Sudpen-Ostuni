@@ -73,10 +73,9 @@ export const CompareSection: React.FC<CompareSectionProps> = ({
           {compareItems.map((item) => {
             const { id, agenda, colore, qty } = item;
             
-            // Calc current unit price for that item with standard tier discount
+            // Calc current unit price for that item with standard tier discount (prezzo al pubblico già IVA compresa)
             const discountMultiplier = getDiscountMultiplier(qty);
-            const rawUnitPrice = agenda.prezzoBaseUnitario * discountMultiplier;
-            const singleItemPriceWithVat = Number((rawUnitPrice * 1.22).toFixed(2));
+            const singleItemPriceWithVat = Number(((agenda.prezzoIvaInclusa ?? agenda.prezzoBaseUnitario) * discountMultiplier).toFixed(2));
             const subtotalWithVat = Number((singleItemPriceWithVat * qty).toFixed(2));
 
             // Check if this item is already added to cart

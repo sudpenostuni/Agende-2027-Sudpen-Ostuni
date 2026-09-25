@@ -1,26 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { AgendaModel, ColorOption } from './types';
-import { loadStoredCatalog, saveStoredCatalog, resetStoredCatalog } from './data/catalog';
+import { loadStoredCatalog } from './data/catalog';
 import { Header } from './components/Header';
 import { CatalogSection } from './components/CatalogSection';
 import { CompareSection } from './components/CompareSection';
 import { CustomizeSection } from './components/CustomizeSection';
 import { OrderSheet } from './components/OrderSheet';
 import { PrintTechniqueModal } from './components/PrintTechniqueModal';
-import { PriceManagementModal } from './components/PriceManagementModal';
 import { PdfCroppingTool } from './components/PdfCroppingTool';
 import { CatalogPageModal } from './components/CatalogPageModal';
 import { MobileBottomNav } from './components/MobileBottomNav';
 import { Footer } from './components/Footer';
-import { User as FirebaseUser } from 'firebase/auth';
-import { initAuth, googleSignIn, googleLogout } from './utils/driveService';
-import { AuthModal } from './components/AuthModal';
 
 export default function App() {
   const [activePage, setActivePage] = useState<'catalog' | 'compare' | 'customize' | 'checkout'>('catalog');
 
   const [techniqueModalOpen, setTechniqueModalOpen] = useState(false);
-  const [priceManagerOpen, setPriceManagerOpen] = useState(false);
   const [pdfCropperOpen, setPdfCropperOpen] = useState(false);
   const [catalogPageModalOpen, setCatalogPageModalOpen] = useState(false);
   const [catalogPageAgenda, setCatalogPageAgenda] = useState<AgendaModel | null>(null);
@@ -33,12 +28,6 @@ export default function App() {
     setCatalogPageColor(color || agenda.colori?.[0] || null);
     setCatalogPageModalOpen(true);
   };
-
-  // Google Authentication State
-  const [googleUser, setGoogleUser] = useState<FirebaseUser | null>(null);
-  const [googleToken, setGoogleToken] = useState<string | null>(null);
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const [authModalOpen, setAuthModalOpen] = useState(false);
 
   // Page 2 State: selections added for comparison
   const [compareItems, setCompareItems] = useState<{ id: string; agenda: AgendaModel; colore: ColorOption; qty: number }[]>([]);
@@ -85,46 +74,7 @@ export default function App() {
 
   useEffect(() => {
     refreshAvailableCrops();
-
-    const unsubscribe = initAuth(
-      (user, token) => {
-        setGoogleUser(user);
-        setGoogleToken(token);
-      },
-      () => {
-        setGoogleUser(null);
-        setGoogleToken(null);
-      }
-    );
-    return () => {
-      if (unsubscribe) unsubscribe();
-    };
   }, []);
-
-  const handleGoogleLogin = async () => {
-    setIsLoggingIn(true);
-    try {
-      const result = await googleSignIn();
-      if (result) {
-        setGoogleUser(result.user);
-        setGoogleToken(result.accessToken);
-      }
-    } catch (err) {
-      console.error('Error signing in:', err);
-    } finally {
-      setIsLoggingIn(false);
-    }
-  };
-
-  const handleGoogleLogout = async () => {
-    try {
-      await googleLogout();
-      setGoogleUser(null);
-      setGoogleToken(null);
-    } catch (err) {
-      console.error('Logout error:', err);
-    }
-  };
 
   // Handlers for Page 1 & 2 "Confronto" list
   const handleAddToCompare = (agenda: AgendaModel, colore: ColorOption) => {
@@ -133,7 +83,6 @@ export default function App() {
         (item) => item.agenda.id === agenda.id && item.colore.nome === colore.nome
       );
       if (existing) {
-        // Already in comparison list, do nothing or let them know
         return prev;
       }
       return [
@@ -204,16 +153,6 @@ export default function App() {
     );
   };
 
-  const handleSaveCatalog = (updatedModels: AgendaModel[]) => {
-    saveStoredCatalog(updatedModels);
-    setCatalogModels(updatedModels);
-  };
-
-  const handleResetCatalog = () => {
-    const defaultModels = resetStoredCatalog();
-    setCatalogModels(defaultModels);
-  };
-
   const handleImageSaved = (code: string, type: 'covers' | 'interiors', newUrl: string, colorSlug?: string) => {
     refreshAvailableCrops();
     const updated = catalogModels.map((m) => {
@@ -234,7 +173,7 @@ export default function App() {
       }
       return m;
     });
-    handleSaveCatalog(updated);
+    setCatalogModels(updated);
   };
 
   return (
@@ -246,12 +185,8 @@ export default function App() {
           setActivePage(page);
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
-        onOpenPriceManager={() => setPriceManagerOpen(true)}
-        onOpenPdfCropper={() => setPdfCropperOpen(true)}
         compareCount={compareItems.length}
         cartCount={cartItems.length}
-        googleUser={googleUser}
-        onOpenAuthModal={() => setAuthModalOpen(true)}
       />
 
       {/* Main Pages router */}
@@ -261,8 +196,6 @@ export default function App() {
             models={catalogModels}
             compareItems={compareItems}
             onAddToCompare={handleAddToCompare}
-            onOpenPriceManager={() => setPriceManagerOpen(true)}
-            onOpenPdfCropper={() => setPdfCropperOpen(true)}
             availableCoverFiles={availableCoverFiles}
             onGoToComparePage={() => {
               setActivePage('compare');
@@ -326,10 +259,6 @@ export default function App() {
             codiceOrdine={codiceOrdine}
             dataCreazione={dataCreazione}
             onUpdateCartQty={handleUpdateCartQty}
-            googleUser={googleUser}
-            googleToken={googleToken}
-            onGoogleLogin={handleGoogleLogin}
-            onGoogleLogout={handleGoogleLogout}
           />
         )}
       </main>
@@ -342,31 +271,14 @@ export default function App() {
         onSelectTechnique={(techId) => setTecnica(techId as any)}
       />
 
-      {/* Price and Stock Management Modal */}
-      <PriceManagementModal
-        isOpen={priceManagerOpen}
-        onClose={() => setPriceManagerOpen(false)}
-        models={catalogModels}
-        onSaveCatalog={handleSaveCatalog}
-        onResetCatalog={handleResetCatalog}
-      />
-
-      {/* PDF Cropping and Extraction Tool */}
-      <PdfCroppingTool
-        isOpen={pdfCropperOpen}
-        onClose={() => setPdfCropperOpen(false)}
-        onImageSaved={handleImageSaved}
-      />
-
-      {/* Global Reserved Area Authentication Modal */}
-      <AuthModal
-        isOpen={authModalOpen}
-        onClose={() => setAuthModalOpen(false)}
-        googleUser={googleUser}
-        onLogin={handleGoogleLogin}
-        onLogout={handleGoogleLogout}
-        isLoggingIn={isLoggingIn}
-      />
+      {/* PDF Cropping Tool (Preservato nel codice per riattivazione su richiesta) */}
+      {pdfCropperOpen && (
+        <PdfCroppingTool
+          isOpen={pdfCropperOpen}
+          onClose={() => setPdfCropperOpen(false)}
+          onImageSaved={handleImageSaved}
+        />
+      )}
 
       {/* Deep-dive PDF Catalog Page Modal */}
       <CatalogPageModal

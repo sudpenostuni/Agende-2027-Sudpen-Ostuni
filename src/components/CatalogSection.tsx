@@ -26,8 +26,6 @@ interface CatalogSectionProps {
   models: AgendaModel[];
   compareItems: { id: string; agenda: AgendaModel; colore: ColorOption; qty: number }[];
   onAddToCompare: (agenda: AgendaModel, colore: ColorOption) => void;
-  onOpenPriceManager?: () => void;
-  onOpenPdfCropper?: () => void;
   availableCoverFiles?: string[];
   onGoToComparePage: () => void;
   onOpenCatalogPage?: (agenda: AgendaModel, colore?: ColorOption) => void;
@@ -115,8 +113,6 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
   models,
   compareItems,
   onAddToCompare,
-  onOpenPriceManager,
-  onOpenPdfCropper,
   availableCoverFiles = [],
   onGoToComparePage,
   onOpenCatalogPage
@@ -196,7 +192,9 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
   };
 
   const getFormattedPrice = (agenda: AgendaModel): string => {
-    return (agenda.prezzoBaseUnitario * 1.22).toFixed(2).replace('.', ',');
+    // I prezzi al pubblico a listino sono già tutti IVA compresa
+    const price = agenda.prezzoIvaInclusa ?? agenda.prezzoBaseUnitario;
+    return price.toFixed(2).replace('.', ',');
   };
 
   // Costruzione delle categorie carosello da visualizzare
@@ -216,12 +214,16 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
         return {
           ...m,
           ...fromCurrent,
-          // Allinea il prezzo Iva inclusa dinamicamente in base a quello base unitario impostato manualmente
-          prezzoIvaInclusa: Number((fromCurrent.prezzoBaseUnitario * 1.22).toFixed(2))
+          // I prezzi al pubblico inseriti a listino sono tutti quanti IVA compresa
+          prezzoBaseUnitario: fromCurrent.prezzoBaseUnitario,
+          prezzoIvaInclusa: fromCurrent.prezzoIvaInclusa ?? fromCurrent.prezzoBaseUnitario,
+          giacenza: fromCurrent.giacenza,
+          disponibile: fromCurrent.disponibile,
+          statoDisponibilita: fromCurrent.statoDisponibilita
         };
       }
-      return null;
-    }).filter(Boolean) as AgendaModel[];
+      return m;
+    });
 
     return {
       category: cat,

@@ -1,4 +1,5 @@
 import { AgendaModel, ColorOption } from '../types';
+import { LISTINO_MAP_PER_ID, LISTINO_MAP_PER_CODICE } from './listinoPrezziGiacenze';
 
 export const COLOR_PRESETS: Record<string, ColorOption> = {
   nero: { nome: 'Nero 02', hex: '#18181b', texture: 'smooth', ribbonColor: '#09090b', bandColor: '#18181b' },
@@ -561,131 +562,6 @@ export const MODELLI_15x21_GIORNALIERO: AgendaModel[] = [
     colori: [COLOR_PRESETS.nero, COLOR_PRESETS.blu, COLOR_PRESETS.rosso, COLOR_PRESETS.arancione]
   },
   {
-    id: 'giorn-124',
-    codice: '124',
-    nome: 'Linea Astuccio 124',
-    sottotitolo: 'Agenda professionale con tasca frontale a soffietto per smartphone o penna',
-    categoria: 'Giornaliere',
-    categoriaOrganizzata: '15x21 - interno giornaliero',
-    formato: '15 x 21 cm',
-    dimensioniCm: '15.0 x 21.0 cm',
-    layout: 'Giornaliera',
-    copertina: 'Poliuretano con tasca sagomata e cerniera',
-    pagine: 324,
-    carta: 'Bianca 70 g/m²',
-    haElastico: false,
-    haSegnalibro: true,
-    haPortapenne: true,
-    immagine: '/agende/covers/124.jpg',
-    immagineInterno: '/agende/interiors/124.jpg',
-    prezzoIvaInclusa: 13.00,
-    prezzoBaseUnitario: 10.66,
-    disponibile: true,
-    statoDisponibilita: 'disponibile',
-    caratteristiche: ['Tasca portadocumenti / astuccio integrato', 'Grande comodità in mobilità', 'Materiali durevoli'],
-    colori: [COLOR_PRESETS.nero, COLOR_PRESETS.blu, COLOR_PRESETS.grigio]
-  },
-  {
-    id: 'port-126',
-    codice: '126',
-    nome: 'Linea Portafoglio 126',
-    sottotitolo: 'Agenda con copertina a portafoglio, scomparti portacarte e tasca interna',
-    categoria: 'Organizer e Portafoglio',
-    categoriaOrganizzata: '15x21 - interno giornaliero',
-    formato: '15 x 21 cm',
-    dimensioniCm: '15.0 x 21.0 cm',
-    layout: 'Giornaliera',
-    copertina: 'Pelle rigenerata / PU con chiusura a patella',
-    pagine: 324,
-    carta: 'Avorio 70 g/m²',
-    haElastico: false,
-    haSegnalibro: true,
-    haPortapenne: true,
-    immagine: '/agende/covers/126.jpg',
-    immagineInterno: '/agende/interiors/126.jpg',
-    prezzoIvaInclusa: 19.00,
-    prezzoBaseUnitario: 15.57,
-    disponibile: true,
-    statoDisponibilita: 'disponibile',
-    caratteristiche: ['Patella di chiusura elegante', 'Slot per biglietti da visita e carte', 'Blocco estraibile o riutilizzabile'],
-    colori: [COLOR_PRESETS.nero, COLOR_PRESETS.blu, COLOR_PRESETS.marrone]
-  },
-  {
-    id: 'giorn-121',
-    codice: '121',
-    nome: 'Linea Clip 121',
-    sottotitolo: 'Agenda direzionale in PU con chiusura a clip magnetica in metallo',
-    categoria: 'Giornaliere',
-    categoriaOrganizzata: '15x21 - interno giornaliero',
-    formato: '15 x 21 cm',
-    dimensioniCm: '15.0 x 21.0 cm',
-    layout: 'Giornaliera',
-    copertina: 'Poliuretano pregiato con fibbia a clip magnetica',
-    pagine: 324,
-    carta: 'Bianca 70 g/m²',
-    haElastico: false,
-    haSegnalibro: true,
-    haPortapenne: true,
-    immagine: '/agende/covers/121.jpg',
-    immagineInterno: '/agende/interiors/121.jpg',
-    prezzoIvaInclusa: 17.50,
-    prezzoBaseUnitario: 14.34,
-    disponibile: true,
-    statoDisponibilita: 'disponibile',
-    caratteristiche: ['Clip magnetica in metallo spazzolato', 'Finitura cucita sui bordi', 'Look dirigenziale'],
-    colori: [COLOR_PRESETS.nero, COLOR_PRESETS.bluNavy, COLOR_PRESETS.grigio]
-  },
-  {
-    id: 'port-128',
-    codice: '128',
-    nome: 'Linea Business 128',
-    sottotitolo: 'Agenda executive business con scomparti multifunzione e chiusura flap',
-    categoria: 'Organizer e Portafoglio',
-    categoriaOrganizzata: '15x21 - interno giornaliero',
-    formato: '15 x 21 cm',
-    dimensioniCm: '15.0 x 21.0 cm',
-    layout: 'Giornaliera',
-    copertina: 'Pelle sintetica Luxury con rifiniture ad ago',
-    pagine: 324,
-    carta: 'Avorio 80 g/m²',
-    haElastico: false,
-    haSegnalibro: true,
-    haPortapenne: true,
-    immagine: '/agende/covers/128.jpg',
-    immagineInterno: '/agende/interiors/128.jpg',
-    prezzoIvaInclusa: 26.00,
-    prezzoBaseUnitario: 21.31,
-    disponibile: true,
-    statoDisponibilita: 'disponibile',
-    caratteristiche: ['Tasche porta tablet / smartphone', 'Scomparto porta carte e tessere', 'Confezione regalo inclusa'],
-    colori: [COLOR_PRESETS.nero, COLOR_PRESETS.bluNavy, COLOR_PRESETS.marrone]
-  },
-  {
-    id: 'giorn-125',
-    codice: '125',
-    nome: 'Linea Borsello 125',
-    sottotitolo: 'Agenda organizer con chiusura perimetrale a zip in metallo dorato',
-    categoria: 'Giornaliere',
-    categoriaOrganizzata: '15x21 - interno giornaliero',
-    formato: '15 x 21 cm',
-    dimensioniCm: '15.0 x 21.0 cm',
-    layout: 'Giornaliera',
-    copertina: 'Poliuretano martellato con cerniera perimetrale',
-    pagine: 324,
-    carta: 'Avorio 80 g/m²',
-    haElastico: false,
-    haSegnalibro: true,
-    haPortapenne: true,
-    immagine: '/agende/covers/125.jpg',
-    immagineInterno: '/agende/interiors/125.jpg',
-    prezzoIvaInclusa: 30.00,
-    prezzoBaseUnitario: 24.59,
-    disponibile: true,
-    statoDisponibilita: 'disponibile',
-    caratteristiche: ['Chiusura zip perimetrale anti-smarrimento', 'Massima sicurezza per documenti', 'Grande prestigio visivo'],
-    colori: [COLOR_PRESETS.nero, COLOR_PRESETS.blu, COLOR_PRESETS.marrone]
-  },
-  {
     id: 'giorn-110',
     codice: '110',
     nome: 'Linea Spiralata 110',
@@ -1043,6 +919,137 @@ export const MODELLI_PLANNING_10x30_SETTIMANALE: AgendaModel[] = [
 ];
 
 // -------------------------------------------------------------
+// 8. CATEGORIA ORGANIZER E PORTAFOGLIO
+// -------------------------------------------------------------
+export const MODELLI_ORGANIZER_PORTAFOGLIO: AgendaModel[] = [
+  {
+    id: 'port-124',
+    codice: '124',
+    nome: 'Linea Astuccio 124',
+    sottotitolo: 'Agenda professionale con tasca frontale a soffietto per smartphone o penna',
+    categoria: 'Organizer e Portafoglio',
+    categoriaOrganizzata: 'Organizer e Portafoglio',
+    formato: '15 x 21 cm',
+    dimensioniCm: '15.0 x 21.0 cm',
+    layout: 'Organizer',
+    copertina: 'Poliuretano con tasca sagomata e cerniera',
+    pagine: 324,
+    carta: 'Bianca 70 g/m²',
+    haElastico: false,
+    haSegnalibro: true,
+    haPortapenne: true,
+    immagine: '/agende/covers/124.jpg',
+    immagineInterno: '/agende/interiors/124.jpg',
+    prezzoIvaInclusa: 13.00,
+    prezzoBaseUnitario: 10.66,
+    disponibile: true,
+    statoDisponibilita: 'disponibile',
+    caratteristiche: ['Tasca portadocumenti / astuccio integrato', 'Grande comodità in mobilità', 'Materiali durevoli'],
+    colori: [COLOR_PRESETS.nero, COLOR_PRESETS.blu, COLOR_PRESETS.grigio]
+  },
+  {
+    id: 'port-121',
+    codice: '121',
+    nome: 'Linea Clip 121',
+    sottotitolo: 'Agenda direzionale in PU con chiusura a clip magnetica in metallo',
+    categoria: 'Organizer e Portafoglio',
+    categoriaOrganizzata: 'Organizer e Portafoglio',
+    formato: '15 x 21 cm',
+    dimensioniCm: '15.0 x 21.0 cm',
+    layout: 'Organizer',
+    copertina: 'Poliuretano pregiato con fibbia a clip magnetica',
+    pagine: 324,
+    carta: 'Bianca 70 g/m²',
+    haElastico: false,
+    haSegnalibro: true,
+    haPortapenne: true,
+    immagine: '/agende/covers/121.jpg',
+    immagineInterno: '/agende/interiors/121.jpg',
+    prezzoIvaInclusa: 17.50,
+    prezzoBaseUnitario: 14.34,
+    disponibile: true,
+    statoDisponibilita: 'disponibile',
+    caratteristiche: ['Clip magnetica in metallo spazzolato', 'Finitura cucita sui bordi', 'Look dirigenziale'],
+    colori: [COLOR_PRESETS.nero, COLOR_PRESETS.bluNavy, COLOR_PRESETS.grigio]
+  },
+  {
+    id: 'port-125',
+    codice: '125',
+    nome: 'Linea Borsello 125',
+    sottotitolo: 'Agenda organizer con chiusura perimetrale a zip in metallo dorato',
+    categoria: 'Organizer e Portafoglio',
+    categoriaOrganizzata: 'Organizer e Portafoglio',
+    formato: '15 x 21 cm',
+    dimensioniCm: '15.0 x 21.0 cm',
+    layout: 'Organizer',
+    copertina: 'Poliuretano martellato con cerniera perimetrale',
+    pagine: 324,
+    carta: 'Avorio 80 g/m²',
+    haElastico: false,
+    haSegnalibro: true,
+    haPortapenne: true,
+    immagine: '/agende/covers/125.jpg',
+    immagineInterno: '/agende/interiors/125.jpg',
+    prezzoIvaInclusa: 30.00,
+    prezzoBaseUnitario: 24.59,
+    disponibile: true,
+    statoDisponibilita: 'disponibile',
+    caratteristiche: ['Chiusura zip perimetrale anti-smarrimento', 'Massima sicurezza per documenti', 'Grande prestigio visivo'],
+    colori: [COLOR_PRESETS.nero, COLOR_PRESETS.blu, COLOR_PRESETS.marrone]
+  },
+  {
+    id: 'port-126',
+    codice: '126',
+    nome: 'Linea Portafoglio 126',
+    sottotitolo: 'Agenda con copertina a portafoglio, scomparti portacarte e tasca interna',
+    categoria: 'Organizer e Portafoglio',
+    categoriaOrganizzata: 'Organizer e Portafoglio',
+    formato: '15 x 21 cm',
+    dimensioniCm: '15.0 x 21.0 cm',
+    layout: 'Organizer',
+    copertina: 'Pelle rigenerata / PU con chiusura a patella',
+    pagine: 324,
+    carta: 'Avorio 70 g/m²',
+    haElastico: false,
+    haSegnalibro: true,
+    haPortapenne: true,
+    immagine: '/agende/covers/126.jpg',
+    immagineInterno: '/agende/interiors/126.jpg',
+    prezzoIvaInclusa: 19.00,
+    prezzoBaseUnitario: 15.57,
+    disponibile: true,
+    statoDisponibilita: 'disponibile',
+    caratteristiche: ['Patella di chiusura elegante', 'Slot per biglietti da visita e carte', 'Blocco estraibile o riutilizzabile'],
+    colori: [COLOR_PRESETS.nero, COLOR_PRESETS.blu, COLOR_PRESETS.marrone]
+  },
+  {
+    id: 'port-128',
+    codice: '128',
+    nome: 'Linea Business 128',
+    sottotitolo: 'Agenda executive business con scomparti multifunzione e chiusura flap',
+    categoria: 'Organizer e Portafoglio',
+    categoriaOrganizzata: 'Organizer e Portafoglio',
+    formato: '15 x 21 cm',
+    dimensioniCm: '15.0 x 21.0 cm',
+    layout: 'Organizer',
+    copertina: 'Pelle sintetica Luxury con rifiniture ad ago',
+    pagine: 324,
+    carta: 'Avorio 80 g/m²',
+    haElastico: false,
+    haSegnalibro: true,
+    haPortapenne: true,
+    immagine: '/agende/covers/128.jpg',
+    immagineInterno: '/agende/interiors/128.jpg',
+    prezzoIvaInclusa: 26.00,
+    prezzoBaseUnitario: 21.31,
+    disponibile: true,
+    statoDisponibilita: 'disponibile',
+    caratteristiche: ['Tasche porta tablet / smartphone', 'Scomparto porta carte e tessere', 'Confezione regalo inclusa'],
+    colori: [COLOR_PRESETS.nero, COLOR_PRESETS.bluNavy, COLOR_PRESETS.marrone]
+  }
+];
+
+// -------------------------------------------------------------
 // HELPER PER LA RIFORMATTAZIONE UNIFICATA DELL'INTESTAZIONE PRODOTTO
 // -------------------------------------------------------------
 export function getAgendaHeaderDisplay(agenda: AgendaModel): {
@@ -1076,6 +1083,9 @@ export function getAgendaHeaderDisplay(agenda: AgendaModel): {
   if (code === '134') linea = 'Madrid con elastico';
   if (code === '124') linea = 'Vivella';
   if (code === '125') linea = 'Matra con zip';
+  if (code === '121') linea = 'Clip';
+  if (code === '126') linea = 'Portafoglio';
+  if (code === '128') linea = 'Business';
   if (code === '110') linea = 'Spiralata';
   if (code === '131') linea = 'Madrid con elastico';
   if (code === '140' || code === '137') linea = 'Interno a quadretti';
@@ -1098,7 +1108,17 @@ export function getAgendaHeaderDisplay(agenda: AgendaModel): {
   let titolo = '';
   let misuraLabel = 'cm ' + (agenda.formato || '').replace(/cm/i, '').trim();
 
-  if (fmt.includes('10x30') || fmt.includes('10 x 30') || fmt.includes('30x10') || fmt.includes('30 x 10') || agenda.layout === 'Planning' || agenda.nome.toLowerCase().includes('planning')) {
+  if (
+    agenda.categoria === 'Organizer e Portafoglio' ||
+    agenda.categoriaOrganizzata?.toLowerCase().includes('organizer') ||
+    agenda.categoriaOrganizzata?.toLowerCase().includes('portafoglio') ||
+    fmt.toLowerCase().includes('organizer') ||
+    fmt.toLowerCase().includes('portafoglio') ||
+    agenda.layout === 'Organizer'
+  ) {
+    misuraLabel = 'cm 15x21';
+    titolo = `Organizer ${linea}`;
+  } else if (fmt.includes('10x30') || fmt.includes('10 x 30') || fmt.includes('30x10') || fmt.includes('30 x 10') || agenda.layout === 'Planning' || agenda.nome.toLowerCase().includes('planning')) {
     misuraLabel = 'cm 10x30';
     titolo = `Planning Settimanale ${linea}`;
   } else if (fmt.includes('9x14') || fmt.includes('9 x 14')) {
@@ -1129,6 +1149,24 @@ export function getAgendaHeaderDisplay(agenda: AgendaModel): {
   };
 }
 
+// Helper per applicare prezzi e giacenze definiti nella tabella centrale `listinoPrezziGiacenze.ts`
+const enrichModelWithListino = (m: AgendaModel): AgendaModel => {
+  const voce = LISTINO_MAP_PER_ID.get(m.id) || LISTINO_MAP_PER_CODICE.get(m.codice);
+  if (!voce) return m;
+  const prezzoVenditaIvaInclusa = voce.prezzoVenditaIvaInclusa ?? m.prezzoIvaInclusa ?? m.prezzoBaseUnitario;
+  const giacenza = voce.giacenza ?? m.giacenza ?? 10;
+  const statoDisponibilita = voce.statoDisponibilita ?? (giacenza === 0 ? 'esaurito' : (m.statoDisponibilita || 'disponibile'));
+  const disponibile = statoDisponibilita !== 'esaurito' && giacenza > 0;
+  return {
+    ...m,
+    prezzoBaseUnitario: prezzoVenditaIvaInclusa,
+    prezzoIvaInclusa: prezzoVenditaIvaInclusa,
+    giacenza,
+    statoDisponibilita,
+    disponibile
+  };
+};
+
 // -------------------------------------------------------------
 // DEFINIZIONE UFFICIALE DEI FORMATI ORGANIZZATI
 // -------------------------------------------------------------
@@ -1139,7 +1177,7 @@ export const CATEGORIE_ORGANIZZATE: OrganizedCategory[] = [
     sottotitolo: 'Formato tascabile compatto con visione settimanale su due pagine',
     formatoLabel: '9 x 14 cm',
     tipoLayout: 'Settimanale',
-    modelli: MODELLI_9x14_SETTIMANALE
+    modelli: MODELLI_9x14_SETTIMANALE.map(enrichModelWithListino)
   },
   {
     id: 'cat-9x14-giorn',
@@ -1147,7 +1185,7 @@ export const CATEGORIE_ORGANIZZATE: OrganizedCategory[] = [
     sottotitolo: 'Tascabili pratiche con una pagina intera per ogni giorno dell\'anno',
     formatoLabel: '9 x 14 cm',
     tipoLayout: 'Giornaliera',
-    modelli: MODELLI_9x14_GIORNALIERO
+    modelli: MODELLI_9x14_GIORNALIERO.map(enrichModelWithListino)
   },
   {
     id: 'cat-12.5x18-giorn',
@@ -1155,15 +1193,15 @@ export const CATEGORIE_ORGANIZZATE: OrganizedCategory[] = [
     sottotitolo: 'Il formato compatto ideale da borsa o scrivania con ampio spazio di scrittura',
     formatoLabel: '12 x 18 cm',
     tipoLayout: 'Giornaliera',
-    modelli: MODELLI_12_5x18_GIORNALIERO
+    modelli: MODELLI_12_5x18_GIORNALIERO.map(enrichModelWithListino)
   },
   {
     id: 'cat-15x21-giorn',
     titolo: 'Formato 15x21 — Interno Giornaliero',
-    sottotitolo: 'Il classico formato A5 da banco e scrivania, modelli standard, executive e con cerniera',
+    sottotitolo: 'Il classico formato A5 da banco e scrivania, modelli standard ed executive',
     formatoLabel: '15 x 21 cm',
     tipoLayout: 'Giornaliera',
-    modelli: MODELLI_15x21_GIORNALIERO
+    modelli: MODELLI_15x21_GIORNALIERO.map(enrichModelWithListino)
   },
   {
     id: 'cat-17x24-giorn',
@@ -1171,7 +1209,7 @@ export const CATEGORIE_ORGANIZZATE: OrganizedCategory[] = [
     sottotitolo: 'Formato medio-grande ideale per ufficio, studio e gestione appuntamenti dettagliata',
     formatoLabel: '17 x 24 cm',
     tipoLayout: 'Giornaliera',
-    modelli: MODELLI_17x24_GIORNALIERO
+    modelli: MODELLI_17x24_GIORNALIERO.map(enrichModelWithListino)
   },
   {
     id: 'cat-17x24-sett',
@@ -1179,7 +1217,15 @@ export const CATEGORIE_ORGANIZZATE: OrganizedCategory[] = [
     sottotitolo: 'Formato ampio da scrivania con visione settimanale completa e ampio spazio note',
     formatoLabel: '17 x 24 cm',
     tipoLayout: 'Settimanale',
-    modelli: MODELLI_17x24_SETTIMANALE
+    modelli: MODELLI_17x24_SETTIMANALE.map(enrichModelWithListino)
+  },
+  {
+    id: 'cat-organizer-portafoglio',
+    titolo: 'Organizer e Portafoglio',
+    sottotitolo: 'Modelli direzionali con astuccio, chiusura a zip perimetrale, clip magnetica e scomparti multifunzione',
+    formatoLabel: 'Organizer',
+    tipoLayout: 'Altro',
+    modelli: MODELLI_ORGANIZER_PORTAFOGLIO.map(enrichModelWithListino)
   },
   {
     id: 'cat-10x30-planning',
@@ -1187,17 +1233,11 @@ export const CATEGORIE_ORGANIZZATE: OrganizedCategory[] = [
     sottotitolo: 'Pratico planning orizzontale da scrivania con visione settimanale a spirale',
     formatoLabel: '10 x 30 cm',
     tipoLayout: 'Settimanale',
-    modelli: MODELLI_PLANNING_10x30_SETTIMANALE
+    modelli: MODELLI_PLANNING_10x30_SETTIMANALE.map(enrichModelWithListino)
   }
 ];
 
 // Lista unificata dei modelli organizzati
 export const TUTTI_MODELLI_ORGANIZZATI: AgendaModel[] = [
-  ...MODELLI_9x14_SETTIMANALE,
-  ...MODELLI_9x14_GIORNALIERO,
-  ...MODELLI_12_5x18_GIORNALIERO,
-  ...MODELLI_15x21_GIORNALIERO,
-  ...MODELLI_17x24_GIORNALIERO,
-  ...MODELLI_17x24_SETTIMANALE,
-  ...MODELLI_PLANNING_10x30_SETTIMANALE
+  ...CATEGORIE_ORGANIZZATE.flatMap((c) => c.modelli)
 ];
